@@ -258,7 +258,7 @@ export function ImageUpload({
             disabled={uploading}
           >
             <ImageIcon className="w-4 h-4 mr-2" />
-            Choose Image
+            Elegir Imagen
           </Button>
         </div>
       )}
