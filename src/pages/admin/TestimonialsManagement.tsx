@@ -220,7 +220,7 @@ export function TestimonialsManagement() {
                           {testimonial.author_name}
                         </div>
                         <div className="text-xs text-slate-400">
-                          Added {formatDate(testimonial.created_at)}
+                          Agregado {formatDate(testimonial.created_at)}
                         </div>
                       </div>
                     </div>

@@ -375,7 +375,7 @@ Separa los párrafos con dos saltos de línea."
                     
                     {post.image_url && (
                       <div className="text-sm text-slate-500">
-                        <span>Featured image: {post.image_url}</span>
+                        <span>Imagen destacada: {post.image_url}</span>
                       </div>
                     )}
                   </div>
