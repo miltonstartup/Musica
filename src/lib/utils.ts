@@ -13,9 +13,12 @@ export const formatPrice = (price: number): string => {
   }).format(price)
 }
 
-export const formatDate = (dateString: string): string => {
+export const formatDate = (dateString: string | Date | undefined): string => {
+  if (!dateString) return ''
+  
+  const date = typeof dateString === 'string' ? new Date(dateString) : dateString
   const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' }
-  return new Date(dateString).toLocaleDateString('es-ES', options)
+  return date.toLocaleDateString('es-ES', options)
 }
 
 export const formatTime = (timeString: string): string => {
