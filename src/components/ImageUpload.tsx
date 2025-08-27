@@ -1,6 +1,7 @@
 import React, { useState, useRef, DragEvent, ChangeEvent } from 'react';
-import { Upload, X, Image as ImageIcon, AlertCircle } from 'lucide-react';
+import { Upload, X, Image as ImageIcon, AlertCircle, Link as LinkIcon } from 'lucide-react';
 import { Button } from './Button';
+import { PasteButton } from './PasteButton';
 import { useImageUpload } from '../hooks/useImageUpload';
 
 interface ImageUploadProps {
@@ -8,17 +9,21 @@ interface ImageUploadProps {
   currentImageUrl?: string;
   className?: string;
   bucket?: string;
+  allowUrlInput?: boolean;
 }
 
 export function ImageUpload({ 
   onImageUploaded, 
   currentImageUrl, 
   className = '', 
-  bucket = 'blog-images' 
+  bucket = 'blog-images',
+  allowUrlInput = true
 }: ImageUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(currentImageUrl);
   const [error, setError] = useState<string | null>(null);
+  const [showUrlInput, setShowUrlInput] = useState(false);
+  const [urlInput, setUrlInput] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { uploadImage, uploading, progress } = useImageUpload({
@@ -76,6 +81,20 @@ export function ImageUpload({
     }
   };
 
+  const handleUrlSubmit = () => {
+    if (urlInput.trim()) {
+      setPreviewUrl(urlInput.trim());
+      onImageUploaded(urlInput.trim());
+      setUrlInput('');
+      setShowUrlInput(false);
+      setError(null);
+    }
+  };
+
+  const handleUrlPaste = (url: string) => {
+    setUrlInput(url);
+  };
+
   const handleBrowseClick = () => {
     fileInputRef.current?.click();
   };
@@ -89,7 +108,7 @@ export function ImageUpload({
   };
 
   return (
-    <div className={`space-y-3 ${className}`}>
+    <div className={`space-y-4 ${className}`}>
       <div
         className={`
           relative border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200
@@ -165,6 +184,63 @@ export function ImageUpload({
         />
       </div>
 
+      {/* URL Input Section */}
+      {allowUrlInput && (
+        <div className="space-y-2">
+          {!showUrlInput ? (
+            <div className="text-center">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setShowUrlInput(true)}
+                disabled={uploading}
+              >
+                <LinkIcon className="w-4 h-4 mr-2" />
+                Usar URL de Imagen
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700">
+                URL de Imagen
+              </label>
+              <div className="flex space-x-2">
+                <input
+                  type="url"
+                  value={urlInput}
+                  onChange={(e) => setUrlInput(e.target.value)}
+                  className="flex-1 px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                />
+                <PasteButton onPaste={handleUrlPaste} />
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={handleUrlSubmit}
+                  disabled={!urlInput.trim()}
+                >
+                  Usar URL
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setShowUrlInput(false);
+                    setUrlInput('');
+                  }}
+                >
+                  Cancelar
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {error && (
         <div className="flex items-center p-3 bg-red-50 border border-red-200 rounded-md text-sm">
           <AlertCircle className="w-4 h-4 text-red-600 mr-2 flex-shrink-0" />
@@ -172,7 +248,7 @@ export function ImageUpload({
         </div>
       )}
 
-      {!previewUrl && (
+      {!previewUrl && !showUrlInput && (
         <div className="text-center">
           <Button
             type="button"

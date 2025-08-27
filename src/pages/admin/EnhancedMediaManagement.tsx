@@ -351,16 +351,19 @@ export function EnhancedMediaManagement() {
                     </label>
                     
                     {(formData.media_type === 'photo' || formData.media_type === 'video') ? (
-                      <ImageUpload
-                        currentImageUrl={formData.media_url}
-                        onImageUploaded={(url) => {
-                          setFormData({ ...formData, media_url: url })
-                          setUrlPreview(url)
-                          setUrlError(null)
-                        }}
-                        bucket="media-gallery"
-                        className="w-full"
-                      />
+                      <div className="space-y-3">
+                        <ImageUpload
+                          currentImageUrl={formData.media_url}
+                          onImageUploaded={(url) => {
+                            setFormData({ ...formData, media_url: url })
+                            setUrlPreview(url)
+                            setUrlError(null)
+                          }}
+                          bucket="media-gallery"
+                          allowUrlInput={true}
+                          className="w-full"
+                        />
+                      </div>
                     ) : (
                       <div className="flex space-x-2">
                         <input
@@ -545,57 +548,60 @@ export function EnhancedMediaManagement() {
                       <div>
                         <h3 className="text-lg font-semibold mb-4">{formData.title}</h3>
                         {formData.media_type === 'youtube' && (
-                          <div className="relative bg-black rounded-lg overflow-hidden">
+                          <div className="relative bg-black rounded-lg overflow-hidden mb-4">
                             {(() => {
                               const videoId = extractYouTubeId(formData.media_url)
                               return videoId ? (
                                 <iframe
                                   width="100%"
-                                  height="315"
+                                  height="280"
                                   src={`https://www.youtube.com/embed/${videoId}`}
                                   title={formData.title}
                                   frameBorder="0"
                                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                   allowFullScreen
-                                  className="w-full h-64"
+                                  className="w-full"
                                 />
                               ) : (
-                                <div className="w-full h-64 bg-gray-200 flex items-center justify-center">
+                                <div className="w-full h-64 bg-gray-200 flex items-center justify-center rounded">
                                   <Youtube className="w-16 h-16 text-gray-400" />
+                                  <span className="ml-2 text-gray-500">Video de YouTube no válido</span>
                                 </div>
                               )
                             })()}
                           </div>
                         )}
                         {formData.media_type === 'instagram' && (
-                          <div className="border rounded-lg p-4 bg-gradient-to-br from-purple-50 to-pink-50">
+                          <div className="border rounded-lg p-6 bg-gradient-to-br from-purple-50 to-pink-50 mb-4">
                             <div className="flex items-center justify-center mb-4">
                               <Instagram className="w-12 h-12 text-pink-500" />
                             </div>
-                            <p className="text-center text-slate-600 mb-4">Contenido de Instagram</p>
+                            <h4 className="text-center font-medium text-slate-700 mb-2">{formData.title || 'Contenido de Instagram'}</h4>
+                            <p className="text-center text-slate-600 text-sm mb-4">Vista previa del contenido de Instagram</p>
                             <a 
                               href={formData.media_url} 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="block text-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors"
+                              className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors"
                             >
+                              <Instagram className="w-4 h-4 mr-2" />
                               Ver en Instagram
                             </a>
                           </div>
                         )}
                         {(formData.media_type === 'photo' || formData.media_type === 'video') && (
-                          <div className="border rounded-lg overflow-hidden">
+                          <div className="border rounded-lg overflow-hidden mb-4">
                             {formData.media_type === 'photo' ? (
                               <img 
                                 src={formData.media_url} 
                                 alt={formData.title}
-                                className="w-full h-64 object-cover"
+                                className="w-full max-h-80 object-contain bg-gray-50"
                               />
                             ) : (
                               <video 
                                 src={formData.media_url}
                                 controls
-                                className="w-full h-64 object-cover"
+                                className="w-full max-h-80 object-contain bg-black"
                               />
                             )}
                           </div>
@@ -616,7 +622,7 @@ export function EnhancedMediaManagement() {
                     ) : (
                       <div className="text-center py-8 text-slate-500">
                         <Eye className="w-12 h-12 mx-auto mb-2" />
-                        <p>Completa el título y URL para ver la vista previa</p>
+                        <p>Completa el título y contenido multimedia para ver la vista previa</p>
                       </div>
                     )}
                   </div>

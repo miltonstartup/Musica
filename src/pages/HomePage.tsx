@@ -163,33 +163,39 @@ export function HomePage() {
                     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
                       <div className="relative">
                         {isYoutube && videoId ? (
-                          <iframe
-                            width="100%"
-                            height="192"
-                            src={`https://www.youtube.com/embed/${videoId}`}
-                            title={video.title}
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            className="w-full h-48"
-                          />
+                          <div className="relative bg-black rounded-t-lg overflow-hidden">
+                            <iframe
+                              width="100%"
+                              height="192"
+                              src={`https://www.youtube.com/embed/${videoId}`}
+                              title={video.title}
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              className="w-full h-48"
+                            />
+                          </div>
                         ) : isYoutube ? (
                           <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
                             <Youtube className="w-12 h-12 text-gray-400" />
+                            <span className="ml-2 text-gray-500">Video no válido</span>
                           </div>
                         ) : video.media_type === 'instagram' ? (
-                          <div className="w-full h-48 bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
+                          <div className="w-full h-48 bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center rounded-t-lg">
                             <div className="text-center">
                               <Instagram className="w-12 h-12 text-pink-500 mb-2" />
-                              <p className="text-sm text-slate-600">Ver en Instagram</p>
+                              <p className="text-sm text-slate-600 font-medium">Contenido de Instagram</p>
                             </div>
                           </div>
                         ) : (
-                          <video 
-                            src={video.media_url}
-                            className="w-full h-48 object-cover"
-                            controls
-                          />
+                          <div className="relative bg-black rounded-t-lg overflow-hidden">
+                            <video 
+                              src={video.media_url}
+                              className="w-full h-48 object-cover"
+                              controls
+                              preload="metadata"
+                            />
+                          </div>
                         )}
                       </div>
                       <CardContent className="p-4">
@@ -203,7 +209,7 @@ export function HomePage() {
                               href={video.media_url} 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="inline-flex items-center text-sm text-pink-600 hover:text-pink-700"
+                              className="inline-flex items-center text-sm text-pink-600 hover:text-pink-700 transition-colors"
                             >
                               <Instagram className="w-4 h-4 mr-1" />
                               Ver en Instagram

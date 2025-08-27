@@ -160,14 +160,16 @@ export function ServicesManagement() {
 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Service Image
+                    Imagen del Servicio
                   </label>
-                  <ImageUpload
-                    currentImageUrl={formData.image_url}
-                    onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
-                    bucket="service-images"
-                    className="w-full"
-                  />
+                  <div className="space-y-2">
+                    <ImageUpload
+                      currentImageUrl={formData.image_url}
+                      onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+                      bucket="service-images"
+                      allowUrlInput={true}
+                    />
+                  </div>
                 </div>
               </div>
 

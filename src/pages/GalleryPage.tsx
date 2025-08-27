@@ -3,7 +3,7 @@ import { useMediaGallery } from '../hooks'
 import { MediaItem } from '../types'
 import { Card } from '../components/Card'
 import { Button } from '../components/Button'
-import { Image, Video, Play, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Image, Video, Play, X, ChevronLeft, ChevronRight, Youtube, Instagram } from 'lucide-react'
 import { extractYouTubeId } from '../lib/utils'
 
 interface LightboxProps {
@@ -42,18 +42,20 @@ function Lightbox({ item, onClose, onNext, onPrev }: LightboxProps) {
       const videoId = extractYouTubeId(item.media_url)
       
       return videoId ? (
-        <iframe
-          width="800"
-          height="450"
-          src={`https://www.youtube.com/embed/${videoId}`}
-          title={item.title}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="max-h-[80vh]"
-        />
+        <div className="relative bg-black rounded-lg overflow-hidden">
+          <iframe
+            width="800"
+            height="450"
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+            title={item.title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="max-h-[80vh] w-full"
+          />
+        </div>
       ) : (
-        <div className="max-h-[80vh] max-w-full bg-gray-100 flex items-center justify-center p-8">
+        <div className="max-h-[80vh] max-w-full bg-gray-100 flex items-center justify-center p-8 rounded-lg">
           <div className="text-center">
             <Youtube className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600">Video de YouTube no válido</p>
@@ -64,16 +66,18 @@ function Lightbox({ item, onClose, onNext, onPrev }: LightboxProps) {
     
     if (item.media_type === 'instagram') {
       return (
-        <div className="max-h-[80vh] max-w-full bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center p-8">
+        <div className="max-h-[80vh] max-w-full bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center p-12 rounded-lg">
           <div className="text-center">
             <Instagram className="w-16 h-16 text-pink-500 mx-auto mb-4" />
-            <p className="text-slate-700 mb-4">Contenido de Instagram</p>
+            <h3 className="text-xl font-semibold text-slate-800 mb-2">{item.title}</h3>
+            <p className="text-slate-600 mb-6">{item.description || 'Contenido de Instagram'}</p>
             <a 
               href={item.media_url} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors"
+              className="inline-flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors"
             >
+              <Instagram className="w-5 h-5 mr-2" />
               Ver en Instagram
             </a>
           </div>
@@ -310,13 +314,25 @@ export function GalleryPage() {
               >
                 {renderMediaThumbnail(item)}
                 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-end">
-                  <div className="p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                    <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
+                  <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center p-4">
+                    <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
                     {item.description && (
                       <p className="text-sm opacity-90 line-clamp-2">{item.description}</p>
                     )}
+                    <div className="mt-2 text-xs opacity-75">
+                      Clic para ver en pantalla completa
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Bottom Info Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end">
+                  <div className="p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                    <div className="text-xs opacity-75 uppercase tracking-wide">
+                      {item.category}
+                    </div>
                   </div>
                 </div>
                 
@@ -324,6 +340,7 @@ export function GalleryPage() {
                 <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white p-1 rounded">
                   {item.media_type === 'photo' && <Image className="w-4 h-4" />}
                   {(item.media_type === 'video' || item.media_type === 'youtube') && <Video className="w-4 h-4" />}
+                  {item.media_type === 'instagram' && <Instagram className="w-4 h-4" />}
                 </div>
                 
                 {/* Featured badge */}
