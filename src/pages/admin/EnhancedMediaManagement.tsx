@@ -229,10 +229,10 @@ export function EnhancedMediaManagement() {
       description: item.description || '',
       media_type: item.media_type,
       media_url: item.media_url,
-      thumbnail_url: item.thumbnail_url || '',
+      thumbnail_url: item.thumbnail_url || '', // Coerce null to empty string
       category: item.category,
-      tags: Array.isArray(item.tags) ? item.tags.join(', ') : '',
-      is_featured: item.is_featured
+      tags: Array.isArray(item.tags) ? item.tags.join(', ') : (item.tags || ''), // Handle null tags
+      is_featured: item.is_featured ?? false // Coerce null to false
     })
     setEditingItem(item)
     setIsFormOpen(true)

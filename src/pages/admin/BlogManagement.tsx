@@ -38,7 +38,7 @@ export function BlogManagement() {
     setEditingPost(post)
     setFormData({
       title: post.title,
-      slug: post.slug,
+      slug: post.slug || '', // Ensure slug is always a string
       content: post.content,
       image_url: post.image_url || '',
       published_date: new Date(post.published_date).toISOString().slice(0, 16)
@@ -92,6 +92,7 @@ export function BlogManagement() {
     try {
       const submitData = {
         ...formData,
+        slug: formData.slug || generateSlug(formData.title), // Ensure slug is always a string, generate if empty
         published_date: new Date(formData.published_date).toISOString()
       }
       

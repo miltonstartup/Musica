@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const formatPrice = (price: number): string => {
+export const formatPrice = (price: number): string => { // Exported
   return new Intl.NumberFormat('es-ES', {
     style: 'currency',
     currency: 'USD',
@@ -21,7 +21,7 @@ export const formatDate = (dateString: string | Date | undefined): string => {
   return date.toLocaleDateString('es-ES', options)
 }
 
-export const formatTime = (timeString: string): string => {
+export const formatTime = (timeString: string): string => { // Exported
   const [hours, minutes] = timeString.split(':')
   const date = new Date()
   date.setHours(parseInt(hours), parseInt(minutes))

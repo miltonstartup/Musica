@@ -80,8 +80,9 @@ export interface ContactMessage {
   message: string
   inquiry_type: string
   is_read: boolean
-  admin_response: string | null
+  admin_response: string | null // Ensure this is nullable
   created_at: string
+  updated_at: string // Added based on database schema
   updated_at: string
 }
 
@@ -141,9 +142,11 @@ export interface CreateMediaGalleryData {
 export interface CreateContactMessageData {
   name: string
   email: string
-  phone?: string
+  phone?: string | null // Allow phone to be optional and nullable
   message: string
   inquiry_type: string
+  is_read: boolean // Make is_read required for creation
+  admin_response: string | null // Make admin_response required for creation, and nullable
   is_read: boolean
   admin_response: string | null
 }

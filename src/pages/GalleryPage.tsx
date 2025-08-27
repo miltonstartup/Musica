@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Image as ImageIcon, Video, Youtube, Instagram, Star, Filter, X } from 'lucide-react' // Keep these imports
+import { Image as ImageIcon, Video, Youtube, Instagram, Star, Filter, X } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../components/Card'
 import { Button } from '../components/Button'
 import { Spinner } from '../components/Spinner'
@@ -137,7 +137,7 @@ function GalleryPage() {
             filteredMedia.map((item) => {
               const IconComponent = getMediaIcon(item.media_type)
               return (
-                <Card
+                <div // Wrap Card to handle onClick directly
                   key={item.id}
                   className="cursor-pointer hover:shadow-xl transition-shadow group"
                   onClick={() => openLightbox(item)}
@@ -191,7 +191,7 @@ function GalleryPage() {
                     </div>
                   </CardContent>
                 </Card>
-              )
+                </div>
             })
           )}
         </div>
