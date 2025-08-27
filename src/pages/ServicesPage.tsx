@@ -6,7 +6,6 @@ import { useServices } from '../hooks/useServices'
 import { Spinner } from '../components/Spinner'
 import { formatPrice } from '../lib/utils'
 import { Link } from 'react-router-dom'
-import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
 export function ServicesPage() {
   const { services, loading, error } = useServices()
 

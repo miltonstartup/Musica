@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Plus, Edit2, Trash2, Star, AlertCircle, User } from 'lucide-react'
+import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../../components/Card'
 import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
@@ -71,7 +72,6 @@ export function TestimonialsManagement() {
 
   if (error) {
     return (
-import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-slate-800 mb-2">Error Loading Testimonials</h3>
         <p className="text-slate-600 mb-4">{error}</p>
