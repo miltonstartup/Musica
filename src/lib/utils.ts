@@ -206,6 +206,9 @@ function GalleryPage() {
               variant="ghost"
               size="sm"
               onClick={closeLightbox}
+      )
+      }
+  )
 }
 
 export const isValidInstagramUrl = (url: string): boolean => {
