@@ -1,41 +1,114 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
-import { Card, CardContent, CardHeader } from '../components/Card'
-import { Button } from '../components/Button'
+import { Calendar, Clock, User, Mail, Phone, CheckCircle, XCircle, AlertCircle, Filter } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../../components/Card'
 import { Button } from '../../components/Button'
-import { useBlogPosts } from '../hooks/useBlogPosts'
 import { Spinner } from '../../components/Spinner'
-import { formatDate } from '../../lib/utils'
-import type { BlogPost } from '../types'
+import { appointmentsApi } from '../../api/appointments'
+import { servicesApi } from '../../api/services'
+import { formatDate, formatTime, formatPrice } from '../../lib/utils'
+import type { Appointment, Service } from '../../types'
 
-export function BlogPage() {
-  const { blogPosts, loading, error } = useBlogPosts()
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([])
+type FilterStatus = 'all' | 'pending' | 'confirmed' | 'cancelled'
 
-  React.useEffect(() => {
-    if (!blogPosts) return
+export function AppointmentsManagement() {
+  const [appointments, setAppointments] = useState<Appointment[]>([])
+  const [services, setServices] = useState<Service[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [filter, setFilter] = useState<FilterStatus>('all')
+  const [updatingStatus, setUpdatingStatus] = useState<string | null>(null)
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null)
+
+  useEffect(() => {
+    loadData()
+  }, [])
+
+  const loadData = async () => {
+    try {
+      setLoading(true)
+      const [appointmentsData, servicesData] = await Promise.all([
+        appointmentsApi.getAll(),
+        servicesApi.getAll()
+      ])
+      setAppointments(appointmentsData)
+      setServices(servicesData)
+      setError(null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ocurrió un error')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleStatusUpdate = async (appointmentId: string, status: 'confirmed' | 'cancelled') => {
+    const actionVerb = status === 'confirmed' ? 'aceptar' : 'cancelar';
+    if (!confirm(`¿Estás seguro de que quieres ${actionVerb} esta cita?`)) return
     
-    const filtered = searchTerm
-      ? blogPosts.filter(post => 
-          post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          post.content.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      : blogPosts
-    
-    setFilteredPosts(filtered)
-  }, [blogPosts, searchTerm])
+    setUpdatingStatus(appointmentId)
+    try {
+      await appointmentsApi.updateStatus(appointmentId, status)
+      await loadData() // Refresh data
+    } catch (error) {
+      alert('Error al actualizar la cita: ' + (error instanceof Error ? error.message : 'Error desconocido'))
+    } finally {
+      setUpdatingStatus(null)
+    }
+  }
 
-  const getExcerpt = (content: string, maxLength: number = 200) => {
-    if (content.length <= maxLength) return content
-    return content.substring(0, maxLength).replace(/\s+\S*$/, '') + '...'
+  const handleDelete = async (appointmentId: string) => {
+    if (!confirm('¿Estás seguro de que quieres eliminar esta cita?')) return
+    
+    try {
+      await appointmentsApi.delete(appointmentId)
+      await loadData() // Refresh data
+    } catch (error) {
+      alert('Error al eliminar la cita: ' + (error instanceof Error ? error.message : 'Error desconocido'))
+    }
+  }
+
+  const getServiceName = (serviceId: string | null) => {
+    if (!serviceId) return 'Servicio Desconocido'
+    const service = services.find(s => s.id === serviceId)
+    return service ? service.name : 'Servicio Desconocido'
+  }
+
+  const getServicePrice = (serviceId: string | null) => {
+    if (!serviceId) return 0
+    const service = services.find(s => s.id === serviceId)
+    return service ? service.price : 0
+  }
+
+  const filteredAppointments = appointments.filter(appointment => {
+    if (filter === 'all') return true
+    return appointment.status === filter
+  })
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'confirmed':
+        return <CheckCircle className="w-5 h-5 text-green-600" />
+      case 'cancelled':
+        return <XCircle className="w-5 h-5 text-red-600" />
+      default:
+        return <AlertCircle className="w-5 h-5 text-yellow-600" />
+    }
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'confirmed':
+        return 'text-green-700 bg-green-100'
+      case 'cancelled':
+        return 'text-red-700 bg-red-100'
+      default:
+        return 'text-yellow-700 bg-yellow-100'
+    }
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex justify-center py-8">
         <Spinner size="lg" />
       </div>
     )
@@ -43,123 +116,250 @@ export function BlogPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-slate-800 mb-4">No se pudieron cargar las publicaciones del blog</h2>
-          <p className="text-slate-600 mb-6">{error}</p>
-          <Button onClick={() => window.location.reload()}>
-            Intentar de nuevo
-          </Button>
-        </div>
+      <div className="text-center py-8">
+        <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-slate-800 mb-2">Error al cargar las citas</h3>
+        <p className="text-slate-600 mb-4">{error}</p>
+        <Button onClick={loadData}>Intentar de nuevo</Button>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen">
-      {/* Header Section */}
-      <section className="py-16 bg-gradient-to-br from-slate-50 to-amber-50 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <BookOpen className="w-16 h-16 text-amber-600 mx-auto mb-6" />
-          <h1 className="text-4xl font-bold text-slate-800 mb-6"> {/* Keep this heading */}
-            Blog de Educación Musical
-          </h1>
-          <p className="text-xl text-slate-600 mb-8">
-            Perspectivas, consejos e inspiración para tu viaje musical. 
-            Descubre artículos sobre técnica, hábitos de práctica, teoría musical y más.
-          </p>
-          
-          {/* Search Bar */}
-          <div className="max-w-md mx-auto relative"> {/* Keep this div */}
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Buscar artículos..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-            />
-          </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-800">Gestión de Citas</h2>
+          <p className="text-slate-600 mt-1">Revisa y gestiona las reservas de lecciones</p>
         </div>
-      </section>
+        
+        {/* Status Filter */}
+        <div className="flex items-center gap-2">
+          <Filter className="w-5 h-5 text-slate-600" />
+          <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value as FilterStatus)}
+            className="px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+          >
+            <option value="all">Todas las Citas</option>
+            <option value="pending">Pendientes</option>
+            <option value="confirmed">Aceptadas</option>
+            <option value="cancelled">Rechazadas</option>
+          </select>
+        </div>
+      </div>
 
-      {/* Blog Posts */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          {filteredPosts.length === 0 ? (
-            <div className="text-center py-12">
-              <h3 className="text-xl font-semibold text-slate-800 mb-2">
-                {searchTerm ? 'No se encontraron artículos' : 'No hay publicaciones de blog disponibles'} {/* Translate this */}
+      {/* Stats Cards */}
+      <div className="grid md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-slate-800">
+              {appointments.length}
+            </div>
+            <div className="text-sm text-slate-600">Total</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-yellow-600">
+              {appointments.filter(a => a.status === 'pending').length}
+            </div>
+            <div className="text-sm text-slate-600">Pendientes</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-green-600">
+              {appointments.filter(a => a.status === 'confirmed').length}
+            </div>
+            <div className="text-sm text-slate-600">Aceptadas</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-red-600">
+              {appointments.filter(a => a.status === 'cancelled').length}
+            </div>
+            <div className="text-sm text-slate-600">Rechazadas</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Appointments List */}
+      <div className="grid gap-4">
+        {filteredAppointments.length === 0 ? (
+          <Card>
+            <CardContent className="p-8 text-center">
+              <Calendar className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-slate-800 mb-2">
+                {filter === 'all' ? 'No se encontraron citas' : `No hay citas ${filter}`}
               </h3>
               <p className="text-slate-600">
-                {searchTerm 
-                  ? `No hay artículos que coincidan con "${searchTerm}". Intenta con un término de búsqueda diferente.`
-                  : 'Vuelve pronto para nuevos artículos sobre educación musical y consejos de práctica.'
+                {filter === 'all' 
+                  ? 'Las citas aparecerán aquí cuando los estudiantes reserven lecciones.'
+                  : `No se encontraron citas con estado "${filter}".`
                 }
               </p>
-            </div>
-          ) : (
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
-              {filteredPosts.map((post) => (
-                <Card key={post.id} className="hover:shadow-xl transition-shadow">
-                  <div className="h-48 overflow-hidden"> {/* Keep this div */}
-                    <img 
-                      src={post.image_url || '/images/placeholders/elegant_music_education_blog_placeholder.jpg'} 
-                      alt={post.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
+            </CardContent>
+          </Card>
+        ) : (
+          filteredAppointments.map((appointment) => (
+            <Card key={appointment.id} className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <h3 className="text-lg font-semibold text-slate-800">
+                        {appointment.client_name}
+                      </h3>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(appointment.status)}`}>
+                        {getStatusIcon(appointment.status)}
+                        <span className="ml-1 capitalize">{appointment.status}</span>
+                      </span>
+                    </div>
+                    
+                    <div className="grid md:grid-cols-2 gap-4 text-sm text-slate-600">
+                      <div className="space-y-2">
+                        <div className="flex items-center">
+                          <Mail className="w-4 h-4 mr-2 text-slate-400" />
+                          <span>{appointment.client_email}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Calendar className="w-4 h-4 mr-2 text-slate-400" />
+                          <span>{formatDate(appointment.appointment_date)}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Clock className="w-4 h-4 mr-2 text-slate-400" />
+                          <span>{formatTime(appointment.appointment_time)}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div className="flex items-center">
+                          <User className="w-4 h-4 mr-2 text-slate-400" />
+                          <span>{getServiceName(appointment.service_id)}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="text-green-600 font-semibold">
+                            {formatPrice(getServicePrice(appointment.service_id))}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {appointment.notes && (
+                      <div className="mt-3 p-3 bg-slate-50 rounded-md">
+                        <p className="text-sm text-slate-600">
+                          <strong>Notas:</strong> {appointment.notes}
+                        </p>
+                      </div>
+                    )}
                   </div>
                   
-                  <CardHeader>
-                    <div className="flex items-center text-sm text-slate-500 mb-2"> {/* Keep this div */}
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {formatDate(post.published_date)}
-                    </div>
-                    <h2 className="text-xl font-bold text-slate-800 line-clamp-2"> {/* Keep this heading */}
-                      {post.title}
-                    </h2>
-                  </CardHeader>
-                  
-                  <CardContent className="space-y-4">
-                    <p className="text-slate-600 line-clamp-4">
-                      {getExcerpt(post.content.replace(/\*\*([^*]+)\*\*/g, '$1'))}
-                    </p>
+                  {/* Action Buttons */}
+                  <div className="flex flex-col gap-2 ml-4">
+                    {appointment.status === 'pending' && (
+                      <>
+                        <Button
+                          size="sm"
+                          onClick={() => handleStatusUpdate(appointment.id, 'confirmed')}
+                          disabled={updatingStatus === appointment.id}
+                          className="bg-green-600 hover:bg-green-700 text-white"
+                        >
+                          {updatingStatus === appointment.id ? (
+                            <Spinner size="sm" />
+                          ) : (
+                            <>
+                              <CheckCircle className="w-4 h-4 mr-1" />
+                              Aceptar
+                            </>
+                          )}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleStatusUpdate(appointment.id, 'cancelled')}
+                          disabled={updatingStatus === appointment.id}
+                          className="border-red-600 text-red-600 hover:bg-red-50"
+                        >
+                          <XCircle className="w-4 h-4 mr-1" />
+                          Rechazar
+                        </Button>
+                      </>
+                    )}
                     
-                    <Link to={`/blog/${post.slug}`}>
-                      <Button variant="outline" className="w-full">
-                        Leer Más
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setSelectedAppointment(appointment)}
+                    >
+                      Ver Detalles
+                    </Button>
+                    
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleDelete(appointment.id)}
+                      className="border-red-600 text-red-600 hover:bg-red-50"
+                    >
+                      Eliminar
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
 
-      {/* Newsletter Signup */}
-      <section className="py-16 bg-amber-600 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center text-white">
-          <h2 className="text-3xl font-bold mb-4">
-            Manténte Actualizado con Consejos Musicales
-          </h2>
-          <p className="text-xl mb-8 text-amber-100">
-            Recibe los últimos artículos, consejos de práctica e ideas musicales en tu bandeja de entrada.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Ingresa tu correo"
-              className="flex-1 px-4 py-3 rounded-md text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-300"
-            />
-            <Button variant="secondary">
-              Suscribirse
-            </Button>
-          </div>
+      {/* Appointment Details Modal */}
+      {selectedAppointment && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <h3 className="text-lg font-semibold text-slate-800">Detalles de la Cita</h3>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <label className="text-sm font-medium text-slate-600">Nombre del Estudiante</label>
+                <p className="text-slate-800">{selectedAppointment.client_name}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-slate-600">Correo Electrónico</label>
+                <p className="text-slate-800">{selectedAppointment.client_email}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-slate-600">Servicio</label>
+                <p className="text-slate-800">{getServiceName(selectedAppointment.service_id)}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-slate-600">Fecha y Hora</label>
+                <p className="text-slate-800">
+                  {formatDate(selectedAppointment.appointment_date)} a las {formatTime(selectedAppointment.appointment_time)}
+                </p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-slate-600">Estado</label>
+                <p className={`capitalize ${selectedAppointment.status === 'confirmed' ? 'text-green-600' : selectedAppointment.status === 'cancelled' ? 'text-red-600' : 'text-yellow-600'}`}>
+                  {selectedAppointment.status}
+                </p>
+              </div>
+              {selectedAppointment.notes && (
+                <div>
+                  <label className="text-sm font-medium text-slate-600">Notas</label>
+                  <p className="text-slate-800">{selectedAppointment.notes}</p>
+                </div>
+              )}
+              <div className="flex gap-2">
+                <Button onClick={() => setSelectedAppointment(null)}>
+                  Cerrar
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-      </section>
+      )}
     </div>
   )
 }
