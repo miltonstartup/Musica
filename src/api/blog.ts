@@ -12,7 +12,7 @@ export const blogApi = {
     const { data, error } = await supabase
       .from('blog_posts')
       .select('*')
-      .order('published_date', { ascending: false })
+      .order('published_at', { ascending: false })
 
     if (error) throw error
     return data || []

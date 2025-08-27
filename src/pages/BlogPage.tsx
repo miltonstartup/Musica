@@ -111,7 +111,7 @@ export function BlogPage() {
                   <CardHeader>
                     <div className="flex items-center text-sm text-slate-500 mb-2">
                       <Calendar className="w-4 h-4 mr-1" />
-                      {formatDate(post.published_date)}
+                      {formatDate(post.published_at)}
                     </div>
                     <h2 className="text-xl font-bold text-slate-800 line-clamp-2">
                       {post.title}

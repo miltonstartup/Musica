@@ -87,7 +87,7 @@ export function BlogCarousel() {
                       <div>
                         <div className="flex items-center text-sm text-slate-500 mb-3">
                           <Calendar className="w-4 h-4 mr-2" />
-                          {formatDate(post.published_date)}
+                          {formatDate(post.published_at)}
                         </div>
                         <h3 className="text-lg font-bold text-slate-800 mb-3 line-clamp-2">
                           {post.title}
