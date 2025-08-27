@@ -14,11 +14,10 @@ import {
 } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../../components/Card'
 import { Button } from '../../components/Button'
-import { useBlogPosts } from '../../hooks/useBlogPosts'
 import { Spinner } from '../../components/Spinner'
-import { formatDate } from '../../lib/utils'
 import { useServices } from '../../hooks/useServices'
 import { useTestimonials } from '../../hooks/useTestimonials'
+import { useBlogPosts } from '../../hooks/useBlogPosts'
 import { useContactMessages, useUnreadMessages } from '../../hooks/useContactMessages'
 import { appointmentsApi } from '../../api/appointments'
 import { paymentsApi } from '../../api/payments'
@@ -29,7 +28,7 @@ function AdminDashboard() {
   const { services, loading: servicesLoading, error: servicesError } = useServices()
   const { testimonials, loading: testimonialsLoading, error: testimonialsError } = useTestimonials()
   const { blogPosts, loading: blogLoading, error: blogError } = useBlogPosts()
-  const { unreadMessages, loading: messagesLoading, error: messagesError, fetchUnreadMessages } = useUnreadMessages()
+  const { unreadMessages, loading: messagesLoading, error: messagesError } = useUnreadMessages()
 
   const [appointmentsStats, setAppointmentsStats] = useState({
     total: 0,
@@ -51,35 +50,48 @@ function AdminDashboard() {
       setLoadingStats(true)
       setStatsError(null)
       try {
-        const allAppointments = await appointmentsApi.getAll()
-        const pendingAppointments = allAppointments.filter(a => a.status === 'pending').length
-        const confirmedAppointments = allAppointments.filter(a => a.status === 'confirmed').length
-        const cancelledAppointments = allAppointments.filter(a => a.status === 'cancelled').length
+        // Try to fetch appointments, but don't fail if it errors
+        try {
+          const allAppointments = await appointmentsApi.getAll()
+          const pendingAppointments = allAppointments.filter(a => a.status === 'pending').length
+          const confirmedAppointments = allAppointments.filter(a => a.status === 'confirmed').length
+          const cancelledAppointments = allAppointments.filter(a => a.status === 'cancelled').length
 
-        setAppointmentsStats({
-          total: allAppointments.length,
-          pending: pendingAppointments,
-          confirmed: confirmedAppointments,
-          cancelled: cancelledAppointments
-        })
+          setAppointmentsStats({
+            total: allAppointments.length,
+            pending: pendingAppointments,
+            confirmed: confirmedAppointments,
+            cancelled: cancelledAppointments
+          })
+        } catch (appointmentsError) {
+          console.warn('Could not load appointments stats:', appointmentsError)
+          setAppointmentsStats({ total: 0, pending: 0, confirmed: 0, cancelled: 0 })
+        }
 
-        const paymentStatsData = await paymentsApi.getStats()
-        setPaymentsStats(paymentStatsData)
+        // Try to fetch payment stats, but don't fail if it errors
+        try {
+          const paymentStatsData = await paymentsApi.getStats()
+          setPaymentsStats(paymentStatsData)
+        } catch (paymentsError) {
+          console.warn('Could not load payments stats:', paymentsError)
+          setPaymentsStats({ totalRevenue: 0, pendingAmount: 0, paidCount: 0, pendingCount: 0 })
+        }
 
       } catch (err) {
-        setStatsError(err instanceof Error ? err.message : 'Error al cargar las estadísticas.')
+        console.warn('General stats error:', err)
+        // Don't set error state, just use default values
       } finally {
         setLoadingStats(false)
       }
     }
     fetchStats()
-    fetchUnreadMessages() // Fetch unread messages for the dashboard
-  }, [fetchUnreadMessages])
+  }, [])
 
-  const totalLoading = servicesLoading || testimonialsLoading || blogLoading || messagesLoading || loadingStats
-  const anyError = servicesError || testimonialsError || blogError || messagesError || statsError
+  // Only show loading if core data is loading
+  const coreLoading = servicesLoading || testimonialsLoading || blogLoading
+  const coreError = servicesError || testimonialsError || blogError
 
-  if (totalLoading) {
+  if (coreLoading) {
     return (
       <div className="flex justify-center py-8">
         <Spinner size="lg" />
@@ -87,12 +99,12 @@ function AdminDashboard() {
     )
   }
 
-  if (anyError) {
+  if (coreError) {
     return (
       <div className="text-center py-8">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-slate-800 mb-2">Error al cargar el panel de control</h3>
-        <p className="text-slate-600 mb-4">{anyError}</p>
+        <p className="text-slate-600 mb-4">{coreError}</p>
         <Button onClick={() => window.location.reload()}>Intentar de nuevo</Button>
       </div>
     )
