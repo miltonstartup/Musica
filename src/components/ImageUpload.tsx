@@ -81,10 +81,27 @@ export function ImageUpload({
     }
   };
 
+  const isValidImageUrl = (url: string): boolean => {
+    try {
+      const urlObj = new URL(url);
+      const pathname = urlObj.pathname.toLowerCase();
+      return /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?|$)/.test(pathname) || 
+             url.includes('data:image/') ||
+             url.includes('blob:');
+    } catch {
+      return false;
+    }
+  };
+
   const handleUrlSubmit = () => {
-    if (urlInput.trim()) {
-      setPreviewUrl(urlInput.trim());
-      onImageUploaded(urlInput.trim());
+    const trimmedUrl = urlInput.trim();
+    if (trimmedUrl) {
+      if (!isValidImageUrl(trimmedUrl)) {
+        setError('Please enter a valid image URL (jpg, png, gif, webp, etc.)');
+        return;
+      }
+      setPreviewUrl(trimmedUrl);
+      onImageUploaded(trimmedUrl);
       setUrlInput('');
       setShowUrlInput(false);
       setError(null);
@@ -127,6 +144,7 @@ export function ImageUpload({
               src={previewUrl}
               alt="Upload preview"
               className="max-w-full max-h-48 mx-auto rounded-lg object-cover"
+              onError={() => setError('Failed to load image. Please check the URL or try a different image.')}
             />
             <Button
               type="button"
@@ -136,7 +154,7 @@ export function ImageUpload({
               onClick={(e) => {
                 e.stopPropagation();
                 handleRemoveImage();
-              Seleccionar Imagen
+              }}
             >
               <X className="w-4 h-4" />
             </Button>
@@ -212,6 +230,7 @@ export function ImageUpload({
                   onChange={(e) => setUrlInput(e.target.value)}
                   className="flex-1 px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
                   placeholder="https://ejemplo.com/imagen.jpg"
+                  onKeyPress={(e) => e.key === 'Enter' && handleUrlSubmit()}
                 />
                 <PasteButton onPaste={handleUrlPaste} />
               </div>
@@ -248,14 +267,13 @@ export function ImageUpload({
         </div>
       )}
 
-      {!previewUrl && !showUrlInput && (
-        <div className="text-center"> {/* Keep this div */}
+      {!previewUrl && !showUrlInput && !uploading && (
+        <div className="text-center">
           <Button
             type="button"
             variant="outline"
             size="sm"
             onClick={handleBrowseClick}
-            disabled={uploading}
           >
             <ImageIcon className="w-4 h-4 mr-2" />
             Elegir Imagen
