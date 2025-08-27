@@ -1,34 +1,47 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
+import { Image as ImageIcon, Video, Youtube, Instagram, Star, Filter, X } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../components/Card'
 import { Button } from '../components/Button'
-import { useBlogPosts } from '../hooks/useBlogPosts'
 import { Spinner } from '../components/Spinner'
 import { formatDate } from '../lib/utils'
-import type { BlogPost } from '../types'
+import { useMediaGallery } from '../hooks/useMediaGallery'
+import { extractYouTubeId } from '../lib/utils'
 
-export function BlogPage() {
-  const { blogPosts, loading, error } = useBlogPosts()
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([])
+type MediaType = 'all' | 'photo' | 'video' | 'youtube' | 'instagram'
+type CategoryType = 'all' | 'lecciones' | 'performances' | 'testimonios' | 'eventos' | 'general'
 
-  React.useEffect(() => {
-    if (!blogPosts) return
-    
-    const filtered = searchTerm
-      ? blogPosts.filter(post => 
-          post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          post.content.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      : blogPosts
-    
-    setFilteredPosts(filtered)
-  }, [blogPosts, searchTerm])
+export function GalleryPage() {
+  const { mediaItems, loading, error, fetchMediaItems, fetchMediaByCategory } = useMediaGallery()
+  const [filterType, setFilterType] = useState<MediaType>('all')
+  const [filterCategory, setFilterCategory] = useState<CategoryType>('all')
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [currentMedia, setCurrentMedia] = useState<any>(null)
 
-  const getExcerpt = (content: string, maxLength: number = 200) => {
-    if (content.length <= maxLength) return content
-    return content.substring(0, maxLength).replace(/\s+\S*$/, '') + '...'
+  const filteredMedia = mediaItems.filter(item => {
+    const typeMatch = filterType === 'all' || item.media_type === filterType
+    const categoryMatch = filterCategory === 'all' || item.category === filterCategory
+    return typeMatch && categoryMatch
+  })
+
+  const openLightbox = (item: any) => {
+    setCurrentMedia(item)
+    setLightboxOpen(true)
+  }
+
+  const closeLightbox = () => {
+    setLightboxOpen(false)
+    setCurrentMedia(null)
+  }
+
+  const getMediaIcon = (type: MediaType) => {
+    switch (type) {
+      case 'photo': return ImageIcon
+      case 'video': return Video
+      case 'youtube': return Youtube
+      case 'instagram': return Instagram
+      default: return ImageIcon
+    }
   }
 
   if (loading) {
@@ -43,9 +56,9 @@ export function BlogPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-slate-800 mb-4">No se pudieron cargar las publicaciones del blog</h2>
+          <h2 className="text-2xl font-bold text-slate-800 mb-4">Error al cargar la galería</h2>
           <p className="text-slate-600 mb-6">{error}</p>
-          <Button onClick={() => window.location.reload()}>
+          <Button onClick={() => fetchMediaItems()}>
             Intentar de nuevo
           </Button>
         </div>
@@ -54,110 +67,199 @@ export function BlogPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-slate-50">
       {/* Header Section */}
       <section className="py-16 bg-gradient-to-br from-slate-50 to-amber-50 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <BookOpen className="w-16 h-16 text-amber-600 mx-auto mb-6" />
-          <h1 className="text-4xl font-bold text-slate-800 mb-6"> {/* Keep this heading */}
-            Blog de Educación Musical
+          <ImageIcon className="w-16 h-16 text-amber-600 mx-auto mb-6" />
+          <h1 className="text-4xl font-bold text-slate-800 mb-6">
+            Nuestra Galería Multimedia
           </h1>
-          <p className="text-xl text-slate-600 mb-8">
-            Perspectivas, consejos e inspiración para tu viaje musical. 
-            Descubre artículos sobre técnica, hábitos de práctica, teoría musical y más.
+          <p className="text-xl text-slate-600">
+            Explora momentos de nuestras clases, presentaciones y eventos especiales.
           </p>
-          
-          {/* Search Bar */}
-          <div className="max-w-md mx-auto relative"> {/* Keep this div */}
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Buscar artículos..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-            />
+        </div>
+      </section>
+
+      {/* Filters */}
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto flex flex-wrap gap-4 justify-center">
+          {/* Type Filter */}
+          <div className="flex items-center gap-2">
+            <Filter className="w-5 h-5 text-slate-600" />
+            <select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value as MediaType)}
+              className="px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+            >
+              <option value="all">Todos los Tipos</option>
+              <option value="photo">Fotos</option>
+              <option value="video">Videos</option>
+              <option value="youtube">YouTube</option>
+              <option value="instagram">Instagram</option>
+            </select>
+          </div>
+
+          {/* Category Filter */}
+          <div className="flex items-center gap-2">
+            <Filter className="w-5 h-5 text-slate-600" />
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value as CategoryType)}
+              className="px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+            >
+              <option value="all">Todas las Categorías</option>
+              <option value="lecciones">Lecciones y Clases</option>
+              <option value="performances">Presentaciones y Recitales</option>
+              <option value="testimonios">Testimonios de Estudiantes</option>
+              <option value="eventos">Eventos Especiales</option>
+              <option value="general">General</option>
+            </select>
           </div>
         </div>
       </section>
 
-      {/* Blog Posts */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          {filteredPosts.length === 0 ? (
-            <div className="text-center py-12">
+      {/* Media Grid */}
+      <section className="pb-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {filteredMedia.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <ImageIcon className="w-16 h-16 text-slate-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-slate-800 mb-2">
-                {searchTerm ? 'No se encontraron artículos' : 'No hay publicaciones de blog disponibles'} {/* Translate this */}
+                No se encontraron elementos multimedia
               </h3>
               <p className="text-slate-600">
-                {searchTerm 
-                  ? `No hay artículos que coincidan con "${searchTerm}". Intenta con un término de búsqueda diferente.`
-                  : 'Vuelve pronto para nuevos artículos sobre educación musical y consejos de práctica.'
-                }
+                Ajusta tus filtros o vuelve más tarde para ver nuevo contenido.
               </p>
             </div>
           ) : (
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
-              {filteredPosts.map((post) => (
-                <Card key={post.id} className="hover:shadow-xl transition-shadow">
-                  <div className="h-48 overflow-hidden"> {/* Keep this div */}
-                    <img 
-                      src={post.image_url || '/images/placeholders/elegant_music_education_blog_placeholder.jpg'} 
-                      alt={post.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  
-                  <CardHeader>
-                    <div className="flex items-center text-sm text-slate-500 mb-2"> {/* Keep this div */}
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {formatDate(post.published_date)}
+            filteredMedia.map((item) => {
+              const IconComponent = getMediaIcon(item.media_type)
+              return (
+                <Card
+                  key={item.id}
+                  className="cursor-pointer hover:shadow-xl transition-shadow group"
+                  onClick={() => openLightbox(item)}
+                >
+                  <div className="relative h-48 overflow-hidden">
+                    {item.media_type === 'photo' && (
+                      <img
+                        src={item.thumbnail_url || item.media_url}
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    )}
+                    {item.media_type === 'youtube' && (
+                      <div className="relative w-full h-full bg-black flex items-center justify-center">
+                        <img
+                          src={item.thumbnail_url || `https://img.youtube.com/vi/${extractYouTubeId(item.media_url)}/maxresdefault.jpg`}
+                          alt={item.title}
+                          className="w-full h-full object-cover opacity-75"
+                        />
+                        <Youtube className="absolute w-16 h-16 text-red-500 opacity-90" />
+                      </div>
+                    )}
+                    {(item.media_type === 'video' || item.media_type === 'instagram') && (
+                      <div className="relative w-full h-full bg-black flex items-center justify-center">
+                        {item.thumbnail_url && (
+                          <img
+                            src={item.thumbnail_url}
+                            alt={item.title}
+                            className="w-full h-full object-cover opacity-75"
+                          />
+                        )}
+                        <IconComponent className="absolute w-16 h-16 text-white opacity-90" />
+                      </div>
+                    )}
+                    <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white p-1 rounded">
+                      <IconComponent className="w-4 h-4" />
                     </div>
-                    <h2 className="text-xl font-bold text-slate-800 line-clamp-2"> {/* Keep this heading */}
-                      {post.title}
-                    </h2>
-                  </CardHeader>
-                  
-                  <CardContent className="space-y-4">
-                    <p className="text-slate-600 line-clamp-4">
-                      {getExcerpt(post.content.replace(/\*\*([^*]+)\*\*/g, '$1'))}
-                    </p>
-                    
-                    <Link to={`/blog/${post.slug}`}>
-                      <Button variant="outline" className="w-full">
-                        Leer Más
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </Link>
+                    {item.is_featured && (
+                      <div className="absolute top-2 left-2 bg-amber-500 text-white px-2 py-1 text-xs font-medium rounded flex items-center">
+                        <Star className="w-3 h-3 mr-1" />
+                        Destacado
+                      </div>
+                    )}
+                  </div>
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold text-slate-800 mb-1 line-clamp-1">{item.title}</h3>
+                    <p className="text-sm text-slate-600 line-clamp-2">{item.description}</p>
+                    <div className="flex items-center justify-between text-xs text-slate-500 mt-2">
+                      <span className="bg-slate-100 px-2 py-1 rounded capitalize">{item.category}</span>
+                      <span>{new Date(item.created_at).toLocaleDateString()}</span>
+                    </div>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
+              )
+            })
           )}
         </div>
       </section>
 
-      {/* Newsletter Signup */}
-      <section className="py-16 bg-amber-600 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center text-white">
-          <h2 className="text-3xl font-bold mb-4">
-            Manténte Actualizado con Consejos Musicales
-          </h2>
-          <p className="text-xl mb-8 text-amber-100">
-            Recibe los últimos artículos, consejos de práctica e ideas musicales en tu bandeja de entrada.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Ingresa tu correo"
-              className="flex-1 px-4 py-3 rounded-md text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-300"
-            />
-            <Button variant="secondary">
-              Suscribirse
+      {/* Lightbox */}
+      {lightboxOpen && currentMedia && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
+          <div className="relative max-w-4xl w-full max-h-[90vh] bg-white rounded-lg overflow-hidden">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={closeLightbox}
+              className="absolute top-2 right-2 z-10 text-white hover:text-amber-400"
+            >
+              <X className="w-6 h-6" />
             </Button>
+            <div className="p-4">
+              {currentMedia.media_type === 'photo' && (
+                <img
+                  src={currentMedia.media_url}
+                  alt={currentMedia.title}
+                  className="w-full h-auto max-h-[80vh] object-contain mx-auto"
+                />
+              )}
+              {currentMedia.media_type === 'youtube' && (
+                <div className="relative" style={{ paddingBottom: '56.25%', height: 0 }}>
+                  <iframe
+                    src={`https://www.youtube.com/embed/${extractYouTubeId(currentMedia.media_url)}`}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="absolute top-0 left-0 w-full h-full"
+                    title={currentMedia.title}
+                  ></iframe>
+                </div>
+              )}
+              {currentMedia.media_type === 'video' && (
+                <video controls className="w-full h-auto max-h-[80vh] object-contain mx-auto">
+                  <source src={currentMedia.media_url} type="video/mp4" />
+                  Tu navegador no soporta la etiqueta de video.
+                </video>
+              )}
+              {currentMedia.media_type === 'instagram' && (
+                <div className="flex flex-col items-center justify-center h-full p-8">
+                  <Instagram className="w-24 h-24 text-pink-500 mb-4" />
+                  <p className="text-lg text-slate-700 mb-4 text-center">
+                    Para ver este contenido de Instagram, por favor visita la publicación original:
+                  </p>
+                  <a
+                    href={currentMedia.media_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline flex items-center"
+                  >
+                    Ver en Instagram <X className="w-4 h-4 ml-2" />
+                  </a>
+                </div>
+              )}
+              <div className="mt-4 text-center">
+                <h3 className="text-xl font-bold text-slate-800">{currentMedia.title}</h3>
+                {currentMedia.description && (
+                  <p className="text-slate-600 mt-2">{currentMedia.description}</p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      )}
     </div>
   )
 }

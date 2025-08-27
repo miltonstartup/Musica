@@ -1,163 +1,186 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react'
+import {
+  Users,
+  BookOpen,
+  Calendar,
+  DollarSign,
+  Mail,
+  Image as ImageIcon,
+  Music,
+  MessageSquare,
+  AlertCircle
+} from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../../components/Card'
 import { Button } from '../../components/Button'
 import { useBlogPosts } from '../../hooks/useBlogPosts'
 import { Spinner } from '../../components/Spinner'
 import { formatDate } from '../../lib/utils'
-import type { BlogPost } from '../types'
+import { useServices } from '../../hooks/useServices'
+import { useTestimonials } from '../../hooks/useTestimonials'
+import { useContactMessages, useUnreadMessages } from '../../hooks/useContactMessages'
+import { appointmentsApi } from '../../api/appointments'
+import { paymentsApi } from '../../api/payments'
 
-export function BlogPage() {
-  const { blogPosts, loading, error } = useBlogPosts()
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([])
+export function AdminDashboard() {
+  const { services, loading: servicesLoading, error: servicesError } = useServices()
+  const { testimonials, loading: testimonialsLoading, error: testimonialsError } = useTestimonials()
+  const { blogPosts, loading: blogLoading, error: blogError } = useBlogPosts()
+  const { unreadMessages, loading: messagesLoading, error: messagesError, fetchUnreadMessages } = useUnreadMessages()
 
-  React.useEffect(() => {
-    if (!blogPosts) return
-    
-    const filtered = searchTerm
-      ? blogPosts.filter(post => 
-          post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          post.content.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      : blogPosts
-    
-    setFilteredPosts(filtered)
-  }, [blogPosts, searchTerm])
+  const [appointmentsStats, setAppointmentsStats] = useState({
+    total: 0,
+    pending: 0,
+    confirmed: 0,
+    cancelled: 0
+  })
+  const [paymentsStats, setPaymentsStats] = useState({
+    totalRevenue: 0,
+    pendingAmount: 0,
+    paidCount: 0,
+    pendingCount: 0
+  })
+  const [loadingStats, setLoadingStats] = useState(true)
+  const [statsError, setStatsError] = useState<string | null>(null)
 
-  const getExcerpt = (content: string, maxLength: number = 200) => {
-    if (content.length <= maxLength) return content
-    return content.substring(0, maxLength).replace(/\s+\S*$/, '') + '...'
-  }
+  useEffect(() => {
+    const fetchStats = async () => {
+      setLoadingStats(true)
+      setStatsError(null)
+      try {
+        const allAppointments = await appointmentsApi.getAll()
+        const pendingAppointments = allAppointments.filter(a => a.status === 'pending').length
+        const confirmedAppointments = allAppointments.filter(a => a.status === 'confirmed').length
+        const cancelledAppointments = allAppointments.filter(a => a.status === 'cancelled').length
 
-  if (loading) {
+        setAppointmentsStats({
+          total: allAppointments.length,
+          pending: pendingAppointments,
+          confirmed: confirmedAppointments,
+          cancelled: cancelledAppointments
+        })
+
+        const paymentStatsData = await paymentsApi.getStats()
+        setPaymentsStats(paymentStatsData)
+
+      } catch (err) {
+        setStatsError(err instanceof Error ? err.message : 'Error al cargar las estadísticas.')
+      } finally {
+        setLoadingStats(false)
+      }
+    }
+    fetchStats()
+    fetchUnreadMessages() // Fetch unread messages for the dashboard
+  }, [fetchUnreadMessages])
+
+  const totalLoading = servicesLoading || testimonialsLoading || blogLoading || messagesLoading || loadingStats
+  const anyError = servicesError || testimonialsError || blogError || messagesError || statsError
+
+  if (totalLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex justify-center py-8">
         <Spinner size="lg" />
       </div>
     )
   }
 
-  if (error) {
+  if (anyError) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-slate-800 mb-4">No se pudieron cargar las publicaciones del blog</h2>
-          <p className="text-slate-600 mb-6">{error}</p>
-          <Button onClick={() => window.location.reload()}>
-            Intentar de nuevo
-          </Button>
-        </div>
+      <div className="text-center py-8">
+        <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-slate-800 mb-2">Error al cargar el panel de control</h3>
+        <p className="text-slate-600 mb-4">{anyError}</p>
+        <Button onClick={() => window.location.reload()}>Intentar de nuevo</Button>
       </div>
     )
   }
 
+  const adminNavItems = [
+    { name: 'Servicios', path: '/admin/services', icon: Music, count: services.length },
+    { name: 'Citas', path: '/admin/appointments', icon: Calendar, count: appointmentsStats.total, badge: appointmentsStats.pending > 0 ? appointmentsStats.pending : undefined },
+    { name: 'Blog', path: '/admin/blog', icon: BookOpen, count: blogPosts.length },
+    { name: 'Testimonios', path: '/admin/testimonials', icon: Users, count: testimonials.length },
+    { name: 'Pagos', path: '/admin/payments', icon: DollarSign, count: paymentsStats.paidCount },
+    { name: 'Galería', path: '/admin/media', icon: ImageIcon, count: 0 }, // Count not directly available from hook
+    { name: 'Mensajes', path: '/admin/messages', icon: MessageSquare, count: unreadMessages.length, badge: unreadMessages.length > 0 ? unreadMessages.length : undefined },
+  ]
+
   return (
-    <div className="min-h-screen">
-      {/* Header Section */}
-      <section className="py-16 bg-gradient-to-br from-slate-50 to-amber-50 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <BookOpen className="w-16 h-16 text-amber-600 mx-auto mb-6" />
-          <h1 className="text-4xl font-bold text-slate-800 mb-6">
-            Blog de Educación Musical
-          </h1>
-          <p className="text-xl text-slate-600 mb-8">
-            Perspectivas, consejos e inspiración para tu viaje musical. 
-            Descubre artículos sobre técnica, hábitos de práctica, teoría musical y más.
-          </p>
-          
-          {/* Search Bar */}
-          <div className="max-w-md mx-auto relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Buscar artículos..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-            />
-          </div>
-        </div>
-      </section>
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold text-slate-800">Panel de Administración</h1>
+      <p className="text-slate-600">Bienvenido al panel de control. Aquí puedes gestionar todo el contenido de tu sitio web.</p>
 
-      {/* Blog Posts */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          {filteredPosts.length === 0 ? (
-            <div className="text-center py-12">
-              <h3 className="text-xl font-semibold text-slate-800 mb-2">
-                {searchTerm ? 'No se encontraron artículos' : 'No hay publicaciones de blog disponibles'}
-              </h3>
-              <p className="text-slate-600">
-                {searchTerm 
-                  ? `No hay artículos que coincidan con "${searchTerm}". Intenta con un término de búsqueda diferente.`
-                  : 'Vuelve pronto para nuevos artículos sobre educación musical y consejos de práctica.'
-                }
-              </p>
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-slate-500">Citas Pendientes</p>
+                <h2 className="text-3xl font-bold text-yellow-600">{appointmentsStats.pending}</h2>
+              </div>
+              <Calendar className="w-10 h-10 text-yellow-500" />
             </div>
-          ) : (
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
-              {filteredPosts.map((post) => (
-                <Card key={post.id} className="hover:shadow-xl transition-shadow">
-                  <div className="h-48 overflow-hidden">
-                    <img 
-                      src={post.image_url || '/images/placeholders/elegant_music_education_blog_placeholder.jpg'} 
-                      alt={post.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
+            <Link to="/admin/appointments" className="text-sm text-amber-600 hover:underline mt-4 block">
+              Ver todas las citas
+            </Link>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-slate-500">Mensajes No Leídos</p>
+                <h2 className="text-3xl font-bold text-blue-600">{unreadMessages.length}</h2>
+              </div>
+              <Mail className="w-10 h-10 text-blue-500" />
+            </div>
+            <Link to="/admin/messages" className="text-sm text-amber-600 hover:underline mt-4 block">
+              Ver todos los mensajes
+            </Link>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-slate-500">Ingresos Totales (Estimado)</p>
+                <h2 className="text-3xl font-bold text-green-600">${paymentsStats.totalRevenue.toFixed(2)}</h2>
+              </div>
+              <DollarSign className="w-10 h-10 text-green-500" />
+            </div>
+            <Link to="/admin/payments" className="text-sm text-amber-600 hover:underline mt-4 block">
+              Ver historial de pagos
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Navigation Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {adminNavItems.map((item) => (
+          <Link key={item.name} to={item.path}>
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardContent className="p-6 flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-xl font-semibold text-slate-800">{item.name}</h3>
+                    {item.badge !== undefined && item.badge > 0 && (
+                      <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                        {item.badge}
+                      </span>
+                    )}
                   </div>
-                  
-                  <CardHeader>
-                    <div className="flex items-center text-sm text-slate-500 mb-2">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {formatDate(post.published_date)}
-                    </div>
-                    <h2 className="text-xl font-bold text-slate-800 line-clamp-2">
-                      {post.title}
-                    </h2>
-                  </CardHeader>
-                  
-                  <CardContent className="space-y-4">
-                    <p className="text-slate-600 line-clamp-4">
-                      {getExcerpt(post.content.replace(/\*\*([^*]+)\*\*/g, '$1'))}
-                    </p>
-                    
-                    <Link to={`/blog/${post.slug}`}>
-                      <Button variant="outline" className="w-full">
-                        Leer Más
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Newsletter Signup */}
-      <section className="py-16 bg-amber-600 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center text-white">
-          <h2 className="text-3xl font-bold mb-4">
-            Manténte Actualizado con Consejos Musicales
-          </h2>
-          <p className="text-xl mb-8 text-amber-100">
-            Recibe los últimos artículos, consejos de práctica e ideas musicales en tu bandeja de entrada.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Ingresa tu correo"
-              className="flex-1 px-4 py-3 rounded-md text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-300"
-            />
-            <Button variant="secondary">
-              Suscribirse
-            </Button>
-          </div>
-        </div>
-      </section>
+                  <p className="text-sm text-slate-600 mt-1">
+                    {item.name === 'Citas' ? `${item.count} total` : `${item.count} elementos`}
+                  </p>
+                </div>
+                <item.icon className="w-8 h-8 text-amber-600" />
+              </CardContent>
+            </Card>
+          </Link>
+        ))}
+      </div>
     </div>
   )
 }

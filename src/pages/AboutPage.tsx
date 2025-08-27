@@ -1,161 +1,122 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
+import { ArrowRight, Award, Users, Music } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../components/Card'
 import { Button } from '../components/Button'
-import { useBlogPosts } from '../hooks/useBlogPosts'
 import { Spinner } from '../components/Spinner'
 import { formatDate } from '../lib/utils'
-import type { BlogPost } from '../types'
+import { Link } from 'react-router-dom'
 
-export function BlogPage() {
-  const { blogPosts, loading, error } = useBlogPosts()
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([])
-
-  React.useEffect(() => {
-    if (!blogPosts) return
-    
-    const filtered = searchTerm
-      ? blogPosts.filter(post => 
-          post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          post.content.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      : blogPosts
-    
-    setFilteredPosts(filtered)
-  }, [blogPosts, searchTerm])
-
-  const getExcerpt = (content: string, maxLength: number = 200) => {
-    if (content.length <= maxLength) return content
-    return content.substring(0, maxLength).replace(/\s+\S*$/, '') + '...'
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Spinner size="lg" />
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-slate-800 mb-4">No se pudieron cargar las publicaciones del blog</h2>
-          <p className="text-slate-600 mb-6">{error}</p>
-          <Button onClick={() => window.location.reload()}>
-            Intentar de nuevo
-          </Button>
-        </div>
-      </div>
-    )
-  }
-
+export function AboutPage() {
   return (
-    <div className="min-h-screen">
-      {/* Header Section */}
+    <div className="min-h-screen bg-slate-50">
+      {/* Hero Section */}
       <section className="py-16 bg-gradient-to-br from-slate-50 to-amber-50 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <BookOpen className="w-16 h-16 text-amber-600 mx-auto mb-6" />
           <h1 className="text-4xl font-bold text-slate-800 mb-6">
-            Blog de Educación Musical
+            Acerca de Mí
           </h1>
-          <p className="text-xl text-slate-600 mb-8">
-            Perspectivas, consejos e inspiración para tu viaje musical. 
-            Descubre artículos sobre técnica, hábitos de práctica, teoría musical y más.
+          <p className="text-xl text-slate-600">
+            Mi pasión es inspirar el amor por la música en estudiantes de todas las edades.
           </p>
-          
-          {/* Search Bar */}
-          <div className="max-w-md mx-auto relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Buscar artículos..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+        </div>
+      </section>
+
+      {/* Teacher Biography */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          <div className="relative">
+            <img
+              src="https://images.pexels.com/photos/3771089/pexels-photo-3771089.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              alt="Music Teacher Portrait"
+              className="rounded-lg shadow-lg w-full h-96 object-cover"
             />
+            <div className="absolute -bottom-4 -right-4 bg-amber-600 text-white p-4 rounded-lg shadow-lg">
+              <div className="text-center">
+                <div className="text-2xl font-bold">15+</div>
+                <div className="text-sm">Años de Experiencia</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-6">
+              Mi Viaje Musical y Filosofía de Enseñanza
+            </h2>
+            <p className="text-lg text-slate-600 mb-6">
+              Desde una edad temprana, la música ha sido el centro de mi vida. Comencé mis estudios de piano a los cinco años y desde entonces, mi amor por el arte musical no ha hecho más que crecer. Obtuve mi licenciatura en Interpretación Musical de la prestigiosa Universidad de Música, donde me especialicé en piano y teoría musical.
+            </p>
+            <p className="text-lg text-slate-600 mb-6">
+              Mi filosofía de enseñanza se centra en crear un ambiente de aprendizaje positivo, alentador y personalizado. Creo firmemente que cada estudiante es único, con sus propias fortalezas, desafíos y aspiraciones. Por ello, adapto mis métodos para satisfacer las necesidades individuales, fomentando no solo la habilidad técnica, sino también la creatividad, la expresión y el disfrute de la música.
+            </p>
+            <p className="text-lg text-slate-600 mb-8">
+              Me dedico a nutrir el potencial musical de cada estudiante, ayudándoles a desarrollar una base sólida en técnica, teoría y musicalidad, mientras cultivan una pasión duradera por la música.
+            </p>
+            <Link to="/contacto">
+              <Button variant="primary">
+                Contáctame
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Blog Posts */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          {filteredPosts.length === 0 ? (
-            <div className="text-center py-12">
+      {/* Credentials and Experience */}
+      <section className="py-16 bg-amber-50 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-6">
+            Credenciales y Experiencia
+          </h2>
+          <p className="text-xl text-slate-600 mb-12">
+            Una sólida formación académica y años de experiencia práctica.
+          </p>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="flex flex-col items-center text-center">
+              <Award className="w-16 h-16 text-amber-600 mb-4" />
               <h3 className="text-xl font-semibold text-slate-800 mb-2">
-                {searchTerm ? 'No se encontraron artículos' : 'No hay publicaciones de blog disponibles'}
+                Educación Formal
               </h3>
               <p className="text-slate-600">
-                {searchTerm 
-                  ? `No hay artículos que coincidan con "${searchTerm}". Intenta con un término de búsqueda diferente.`
-                  : 'Vuelve pronto para nuevos artículos sobre educación musical y consejos de práctica.'
-                }
+                Licenciatura en Interpretación Musical, Universidad de Música.
               </p>
             </div>
-          ) : (
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
-              {filteredPosts.map((post) => (
-                <Card key={post.id} className="hover:shadow-xl transition-shadow">
-                  <div className="h-48 overflow-hidden">
-                    <img 
-                      src={post.image_url || '/images/placeholders/elegant_music_education_blog_placeholder.jpg'} 
-                      alt={post.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  
-                  <CardHeader>
-                    <div className="flex items-center text-sm text-slate-500 mb-2">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {formatDate(post.published_date)}
-                    </div>
-                    <h2 className="text-xl font-bold text-slate-800 line-clamp-2">
-                      {post.title}
-                    </h2>
-                  </CardHeader>
-                  
-                  <CardContent className="space-y-4">
-                    <p className="text-slate-600 line-clamp-4">
-                      {getExcerpt(post.content.replace(/\*\*([^*]+)\*\*/g, '$1'))}
-                    </p>
-                    
-                    <Link to={`/blog/${post.slug}`}>
-                      <Button variant="outline" className="w-full">
-                        Leer Más
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              ))}
+            <div className="flex flex-col items-center text-center">
+              <Music className="w-16 h-16 text-amber-600 mb-4" />
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                Experiencia Docente
+              </h3>
+              <p className="text-slate-600">
+                Más de 15 años enseñando piano, guitarra, violín y teoría musical.
+              </p>
             </div>
-          )}
+            <div className="flex flex-col items-center text-center">
+              <Users className="w-16 h-16 text-amber-600 mb-4" />
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                Desarrollo Profesional
+              </h3>
+              <p className="text-slate-600">
+                Participación continua en talleres y seminarios de pedagogía musical.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Newsletter Signup */}
+      {/* Call to Action */}
       <section className="py-16 bg-amber-600 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center text-white">
           <h2 className="text-3xl font-bold mb-4">
-            Manténte Actualizado con Consejos Musicales
+            ¿Listo para Empezar tu Viaje Musical?
           </h2>
           <p className="text-xl mb-8 text-amber-100">
-            Recibe los últimos artículos, consejos de práctica e ideas musicales en tu bandeja de entrada.
+            Da el primer paso hacia la realización musical. Reserva tu clase personalizada hoy.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Ingresa tu correo"
-              className="flex-1 px-4 py-3 rounded-md text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-300"
-            />
-            <Button variant="secondary">
-              Suscribirse
+          <Link to="/reservar">
+            <Button variant="secondary" size="lg">
+              Agenda tu Primera Clase
+              <Calendar className="w-5 h-5 ml-2" />
             </Button>
-          </div>
+          </Link>
         </div>
       </section>
     </div>
