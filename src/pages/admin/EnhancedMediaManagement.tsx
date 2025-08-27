@@ -146,8 +146,14 @@ export function EnhancedMediaManagement() {
     setSubmitting(true)
 
     try {
+      // Convert comma-separated tags string to array
+      const tagsArray = formData.tags.trim() 
+        ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
+        : []
+      
       const submitData = {
         ...formData,
+        tags: tagsArray,
         thumbnail_url: formData.thumbnail_url || urlPreview || '',
         updated_at: new Date().toISOString()
       }
@@ -183,7 +189,7 @@ export function EnhancedMediaManagement() {
       media_url: item.media_url,
       thumbnail_url: item.thumbnail_url || '',
       category: item.category,
-      tags: Array.isArray(item.tags) ? item.tags.join(', ') : (item.tags || ''),
+      tags: Array.isArray(item.tags) ? item.tags.join(', ') : '',
       is_featured: item.is_featured
     })
     setEditingItem(item)

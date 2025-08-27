@@ -66,7 +66,7 @@ export interface MediaGallery {
   media_url: string
   thumbnail_url: string | null
   category: string
-  tags: string | null
+  tags: string[] | null
   is_featured: boolean
   created_at: string
   updated_at: string
@@ -134,7 +134,7 @@ export interface CreateMediaGalleryData {
   media_url: string
   thumbnail_url?: string
   category: string
-  tags?: string
+  tags?: string[]
   is_featured?: boolean
 }
 
