@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, Star, BookOpen, ArrowRight, Play, Youtube, Instagram } from 'lucide-react'
+import { Calendar, Star, BookOpen, ArrowRight } from 'lucide-react'
 import { Button } from '../components/Button'
 import { Card, CardContent } from '../components/Card'
 import { useServices } from '../hooks/useServices'
 import { useTestimonials } from '../hooks/useTestimonials'
 import { useFeaturedMedia } from '../hooks/useMediaGallery'
-import { formatPrice, extractYouTubeId } from '../lib/utils'
+import { formatPrice } from '../lib/utils'
 import { BlogCarousel } from '../components/BlogCarousel'
 import { Spinner } from '../components/Spinner'
 
@@ -18,7 +18,6 @@ export function HomePage() {
   const featuredServices = services.slice(0, 3)
   const featuredTestimonials = testimonials.slice(0, 3)
   const featuredPhotos = featuredItems.filter(item => item.media_type === 'photo').slice(0, 4)
-  const featuredVideos = featuredItems.filter(item => item.media_type === 'youtube' || item.media_type === 'video').slice(0, 3)
 
   return (
     <div className="min-h-screen">
@@ -140,100 +139,6 @@ export function HomePage() {
         </section>
       )}
 
-      {/* Featured Videos Section */}
-      {!mediaLoading && featuredVideos.length > 0 && (
-        <section className="py-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-slate-800 mb-4">
-                Videos Destacados
-              </h2>
-              <p className="text-lg text-slate-600">
-                Descubre nuestras clases y presentaciones a través de estos videos
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredVideos.map((video) => {
-                const isYoutube = video.media_type === 'youtube'
-                const videoId = isYoutube ? extractYouTubeId(video.media_url) : null
-                
-                return (
-                  <div key={video.id} className="group">
-                    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-                      <div className="relative">
-                        {isYoutube && videoId ? (
-                          <div className="relative bg-black rounded-t-lg overflow-hidden">
-                            <iframe
-                              width="100%"
-                              height="192"
-                              src={`https://www.youtube.com/embed/${videoId}`}
-                              title={video.title}
-                              frameBorder="0"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                              className="w-full h-48"
-                            />
-                          </div>
-                        ) : isYoutube ? (
-                          <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                            <Youtube className="w-12 h-12 text-gray-400" />
-                            <span className="ml-2 text-gray-500">Video no válido</span>
-                          </div>
-                        ) : video.media_type === 'instagram' ? (
-                          <div className="w-full h-48 bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center rounded-t-lg">
-                            <div className="text-center">
-                              <Instagram className="w-12 h-12 text-pink-500 mb-2" />
-                              <p className="text-sm text-slate-600 font-medium">Contenido de Instagram</p>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="relative bg-black rounded-t-lg overflow-hidden">
-                            <video 
-                              src={video.media_url}
-                              className="w-full h-48 object-cover"
-                              controls
-                              preload="metadata"
-                            />
-                          </div>
-                        )}
-                      </div>
-                      <CardContent className="p-4">
-                        <h3 className="font-semibold text-slate-800 mb-2">{video.title}</h3>
-                        {video.description && (
-                          <p className="text-slate-600 text-sm line-clamp-2">{video.description}</p>
-                        )}
-                        {video.media_type === 'instagram' && (
-                          <div className="mt-2">
-                            <a 
-                              href={video.media_url} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center text-sm text-pink-600 hover:text-pink-700 transition-colors"
-                            >
-                              <Instagram className="w-4 h-4 mr-1" />
-                              Ver en Instagram
-                            </a>
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </div>
-                )
-              })}
-            </div>
-            
-            <div className="text-center mt-8">
-              <Link to="/galeria">
-                <Button>
-                  Ver Todos los Videos
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Featured Services */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
