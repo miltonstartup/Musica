@@ -55,6 +55,8 @@ export function EnhancedMediaManagement() {
   const [urlPreview, setUrlPreview] = useState<string | null>(null)
   const [urlError, setUrlError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'form' | 'preview'>('form')
+  const [inputMode, setInputMode] = useState<'url' | 'embed'>('url')
+  const [embedCode, setEmbedCode] = useState('')
 
   const validateUrl = (url: string, mediaType: string) => {
     if (!url.trim()) {
@@ -97,6 +99,41 @@ export function EnhancedMediaManagement() {
     }
   }
 
+  const validateEmbedCode = (code: string, mediaType: string) => {
+    if (!code.trim()) {
+      setUrlError(null)
+      setUrlPreview(null)
+      return
+    }
+
+    setUrlError(null)
+    
+    if (mediaType === 'youtube' && isYouTubeEmbed(code)) {
+      const videoId = extractYouTubeIdFromEmbed(code)
+      if (videoId) {
+        setUrlPreview(`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`)
+        const convertedUrl = convertEmbedToUrl(code, 'youtube')
+        setFormData(prev => ({ ...prev, media_url: convertedUrl }))
+      } else {
+        setUrlError('Código de inserción de YouTube no válido')
+        setUrlPreview(null)
+      }
+    } else if (mediaType === 'instagram' && isInstagramEmbed(code)) {
+      const postId = extractInstagramIdFromEmbed(code)
+      if (postId) {
+        const convertedUrl = convertEmbedToUrl(code, 'instagram')
+        setUrlPreview(convertedUrl)
+        setFormData(prev => ({ ...prev, media_url: convertedUrl }))
+      } else {
+        setUrlError('Código de inserción de Instagram no válido')
+        setUrlPreview(null)
+      }
+    } else {
+      setUrlError(`Código de inserción de ${mediaType} no válido`)
+      setUrlPreview(null)
+    }
+  }
+
   const handleUrlChange = (url: string) => {
     setFormData({ ...formData, media_url: url })
     validateUrl(url, formData.media_type)
@@ -115,9 +152,28 @@ export function EnhancedMediaManagement() {
     handleUrlChange(url)
   }
 
+  const handleEmbedPaste = (code: string) => {
+    setEmbedCode(code)
+    
+    // Auto-detect embed type and process
+    const processed = processEmbedCode(code)
+    if (processed) {
+      setFormData(prev => ({
+        ...prev,
+        media_type: processed.type as 'youtube' | 'instagram',
+        media_url: processed.url
+      }))
+      validateEmbedCode(code, processed.type)
+    } else {
+      validateEmbedCode(code, formData.media_type)
+    }
+  }
+
   const handleMediaTypeChange = (mediaType: MediaFormData['media_type']) => {
     setFormData({ ...formData, media_type: mediaType })
     validateUrl(formData.media_url, mediaType)
+    setInputMode('url')
+    setEmbedCode('')
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -163,6 +219,8 @@ export function EnhancedMediaManagement() {
     setUrlPreview(null)
     setUrlError(null)
     setActiveTab('form')
+    setInputMode('url')
+    setEmbedCode('')
   }
 
   const handleEdit = (item: MediaItem) => {
@@ -180,6 +238,8 @@ export function EnhancedMediaManagement() {
     setIsFormOpen(true)
     validateUrl(item.media_url, item.media_type)
     setActiveTab('form')
+    setInputMode('url')
+    setEmbedCode('')
   }
 
   const handleDelete = async (id: string) => {
@@ -335,8 +395,8 @@ export function EnhancedMediaManagement() {
                   {/* URL Input with Paste Button */}
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
-                      {formData.media_type === 'youtube' && 'URL de YouTube *'}
-                      {formData.media_type === 'instagram' && 'URL de Instagram *'}
+                      {formData.media_type === 'youtube' && 'URL o Código de YouTube *'}
+                      {formData.media_type === 'instagram' && 'URL o Código de Instagram *'}
                       {(formData.media_type === 'photo' || formData.media_type === 'video') && 'Imagen/Video *'}
                     </label>
                     
@@ -355,22 +415,74 @@ export function EnhancedMediaManagement() {
                         />
                       </div>
                     ) : (
-                      <div className="flex space-x-2">
-                        <input // Keep this input
-                          type="url"
-                          required
-                          value={formData.media_url}
-                          onChange={(e) => handleUrlChange(e.target.value)}
-                          className={`flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 ${
-                            urlError ? 'border-red-300' : 'border-slate-300'
-                          }`}
-                          placeholder={
-                            formData.media_type === 'youtube' ? 'https://www.youtube.com/watch?v=...' :
-                            formData.media_type === 'instagram' ? 'https://www.instagram.com/p/...' :
-                            'https://ejemplo.com/archivo.jpg'
-                          }
-                        />
-                        <PasteButton onPaste={handleUrlPaste} className="flex-shrink-0" />
+                      <div className="space-y-3">
+                        {/* Input Mode Toggle */}
+                        <div className="flex space-x-1 bg-slate-100 p-1 rounded-lg">
+                          <button
+                            type="button"
+                            onClick={() => setInputMode('url')}
+                            className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                              inputMode === 'url' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-600 hover:text-slate-800'
+                            }`}
+                          >
+                            URL Directa
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setInputMode('embed')}
+                            className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                              inputMode === 'embed' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-600 hover:text-slate-800'
+                            }`}
+                          >
+                            Código de Inserción
+                          </button>
+                        </div>
+
+                        {inputMode === 'url' ? (
+                          <div className="flex space-x-2">
+                            <input
+                              type="url"
+                              required
+                              value={formData.media_url}
+                              onChange={(e) => handleUrlChange(e.target.value)}
+                              className={`flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 ${
+                                urlError ? 'border-red-300' : 'border-slate-300'
+                              }`}
+                              placeholder={
+                                formData.media_type === 'youtube' ? 'https://www.youtube.com/watch?v=...' :
+                                formData.media_type === 'instagram' ? 'https://www.instagram.com/p/...' :
+                                'https://ejemplo.com/archivo.jpg'
+                              }
+                            />
+                            <PasteButton onPaste={handleUrlPaste} className="flex-shrink-0" />
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            <div className="flex space-x-2">
+                              <textarea
+                                required
+                                value={embedCode}
+                                onChange={(e) => {
+                                  setEmbedCode(e.target.value)
+                                  handleEmbedPaste(e.target.value)
+                                }}
+                                rows={4}
+                                className={`flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none ${
+                                  urlError ? 'border-red-300' : 'border-slate-300'
+                                }`}
+                                placeholder={
+                                  formData.media_type === 'youtube' 
+                                    ? '<iframe width="560" height="315" src="https://www.youtube.com/embed/..." frameborder="0" allowfullscreen></iframe>'
+                                    : '<blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/..." ...></blockquote>'
+                                }
+                              />
+                              <PasteButton onPaste={handleEmbedPaste} className="flex-shrink-0 self-start" />
+                            </div>
+                            <p className="text-xs text-slate-500">
+                              Pega el código de inserción de YouTube o Instagram. El tipo se detectará automáticamente.
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
                     
@@ -385,10 +497,16 @@ export function EnhancedMediaManagement() {
                       <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded">
                         <div className="flex items-center text-green-600 text-sm mb-2">
                           <CheckCircle className="w-4 h-4 mr-2" />
-                          URL válida - Vista previa disponible
+                          {inputMode === 'embed' ? 'Código de inserción válido' : 'URL válida'} - Vista previa disponible
                         </div>
                         {formData.media_type === 'youtube' && (
                           <img src={urlPreview} alt="Preview" className="w-32 h-20 object-cover rounded" />
+                        )}
+                        {formData.media_type === 'instagram' && (
+                          <div className="flex items-center text-pink-600 text-sm">
+                            <Instagram className="w-4 h-4 mr-2" />
+                            Contenido de Instagram detectado
+                          </div>
                         )}
                       </div>
                     )}
