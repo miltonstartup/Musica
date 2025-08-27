@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
 import { Calendar, Clock, User, Mail, Phone, CheckCircle, XCircle, AlertCircle, Filter } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../../components/Card'
 import { Button } from '../../components/Button'
