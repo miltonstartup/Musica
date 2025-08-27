@@ -94,7 +94,7 @@ export function BlogCarousel() {
                         </h3>
                         <p className="text-slate-600 text-sm mb-4 line-clamp-3">
                           {getExcerpt(post.content.replace(/\*\*([^*]+)\*\*/g, '$1'))}
-                        </p>
+                        {formatDate(post.published_date)}
                       </div>
                       
                       <Link to={`/blog/${post.slug}`} className="mt-auto">

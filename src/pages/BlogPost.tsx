@@ -99,7 +99,7 @@ export function BlogPost() {
           <div className="mb-6">
             <div className="flex items-center text-slate-500 mb-4">
               <Calendar className="w-4 h-4 mr-2" />
-              <span className="mr-4">{formatDate(post.published_at)}</span>
+              <span className="mr-4">{formatDate(post.published_date)}</span>
               <Clock className="w-4 h-4 mr-2" />
               <span>{Math.ceil(post.content.length / 1000)} min read</span>
             </div>

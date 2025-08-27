@@ -25,7 +25,7 @@ export interface BlogPost {
   slug: string | null
   content: string
   excerpt: string | null
-  published_at: string
+  published_date: string
   author: string | null
   image_url: string | null
   created_at: string
@@ -116,7 +116,7 @@ export interface CreateBlogPostData {
   excerpt?: string
   author?: string
   image_url?: string
-  published_at?: string
+  published_date?: string
 }
 
 export interface CreatePaymentData {
