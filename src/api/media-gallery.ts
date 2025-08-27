@@ -1,18 +1,11 @@
+import { createSupabaseApi } from './baseApi'
 import { supabase } from '../services/supabase'
 import type { MediaGallery, CreateMediaGalleryData } from '../types'
 
+const baseApi = createSupabaseApi<MediaGallery>('media_gallery')
+
 export const mediaGalleryApi = {
-  // Get all media items
-  async getAll(): Promise<MediaGallery[]> {
-    const { data, error } = await supabase
-      .from('media_gallery')
-      .select('*')
-      .order('created_at', { ascending: false })
-
-    if (error) throw error
-    return data || []
-  },
-
+  ...baseApi,
   // Get featured media items
   async getFeatured(): Promise<MediaGallery[]> {
     const { data, error } = await supabase
@@ -47,53 +40,6 @@ export const mediaGalleryApi = {
 
     if (error) throw error
     return data || []
-  },
-
-  // Get media item by ID
-  async getById(id: string): Promise<MediaGallery | null> {
-    const { data, error } = await supabase
-      .from('media_gallery')
-      .select('*')
-      .eq('id', id)
-      .maybeSingle()
-
-    if (error) throw error
-    return data
-  },
-
-  // Create new media item
-  async create(mediaData: CreateMediaGalleryData): Promise<MediaGallery> {
-    const { data, error } = await supabase
-      .from('media_gallery')
-      .insert([mediaData])
-      .select()
-      .single()
-
-    if (error) throw error
-    return data
-  },
-
-  // Update media item
-  async update(id: string, updates: Partial<CreateMediaGalleryData>): Promise<MediaGallery> {
-    const { data, error } = await supabase
-      .from('media_gallery')
-      .update({ ...updates, updated_at: new Date().toISOString() })
-      .eq('id', id)
-      .select()
-      .single()
-
-    if (error) throw error
-    return data
-  },
-
-  // Delete media item
-  async delete(id: string): Promise<void> {
-    const { error } = await supabase
-      .from('media_gallery')
-      .delete()
-      .eq('id', id)
-
-    if (error) throw error
   },
 
   // Toggle featured status

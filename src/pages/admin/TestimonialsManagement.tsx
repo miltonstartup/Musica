@@ -3,6 +3,7 @@ import { Plus, Edit2, Trash2, Star, AlertCircle, User } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../../components/Card'
 import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
+import { useAdminForm } from '../../hooks/useAdminForm'
 import { useTestimonials } from '../../hooks/useTestimonials'
 import { testimonialsApi } from '../../api/testimonials'
 import { formatDate } from '../../lib/utils'
@@ -10,68 +11,40 @@ import type { Testimonial, CreateTestimonialData } from '../../types'
 
 export function TestimonialsManagement() {
   const { testimonials, loading, error, refreshTestimonials } = useTestimonials()
-  const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null)
-  const [isCreating, setIsCreating] = useState(false)
   const [deleting, setDeleting] = useState<string | null>(null)
-  const [formData, setFormData] = useState<CreateTestimonialData>({
+  
+  const initialFormData: CreateTestimonialData = {
     author_name: '',
     content: '',
     rating: 5
+  }
+  
+  const {
+    editingItem: editingTestimonial,
+    isCreating,
+    formData,
+    setFormData,
+    submitting,
+    formError,
+    handleEdit,
+    handleCreate,
+    handleCancel,
+    handleSubmit
+  } = useAdminForm<Testimonial, CreateTestimonialData>({
+    initialData: initialFormData,
+    createFn: testimonialsApi.create,
+    updateFn: testimonialsApi.update,
+    onSuccess: refreshTestimonials
   })
-  const [submitting, setSubmitting] = useState(false)
-  const [formError, setFormError] = useState<string | null>(null)
 
-  const handleEdit = (testimonial: Testimonial) => {
-    setEditingTestimonial(testimonial)
-    setFormData({
-      author_name: testimonial.author_name,
-      content: testimonial.content,
-      rating: testimonial.rating
-    })
-    setIsCreating(false)
-    setFormError(null)
-  }
+  const mapTestimonialToFormData = (testimonial: Testimonial): CreateTestimonialData => ({
+    author_name: testimonial.author_name,
+    content: testimonial.content,
+    rating: testimonial.rating
+  })
 
-  const handleCreate = () => {
-    setEditingTestimonial(null)
-    setFormData({
-      author_name: '',
-      content: '',
-      rating: 5
-    })
-    setIsCreating(true)
-    setFormError(null)
-  }
-
-  const handleCancel = () => {
-    setEditingTestimonial(null)
-    setIsCreating(false)
-    setFormData({
-      author_name: '',
-      content: '',
-      rating: 5
-    })
-    setFormError(null)
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSubmitting(true)
-    setFormError(null)
-
-    try {
-      if (editingTestimonial) {
-        await testimonialsApi.update(editingTestimonial.id, formData)
-      } else {
-        await testimonialsApi.create(formData)
-      }
-      refreshTestimonials()
-      handleCancel()
-    } catch (error) {
-      setFormError(error instanceof Error ? error.message : 'An error occurred')
-    } finally {
-      setSubmitting(false)
-    }
+  const handleEditTestimonial = (testimonial: Testimonial) => {
+    handleEdit(testimonial, mapTestimonialToFormData)
   }
 
   const handleDelete = async (id: string) => {
@@ -257,7 +230,7 @@ export function TestimonialsManagement() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleEdit(testimonial)}
+                      onClick={() => handleEditTestimonial(testimonial)}
                     >
                       <Edit2 className="w-4 h-4" />
                     </Button>

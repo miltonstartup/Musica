@@ -4,7 +4,8 @@ import { MediaItem } from '../../types'
 import { Card, CardContent, CardHeader } from '../../components/Card'
 import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
-import { PasteButton, extractYouTubeId, isValidInstagramUrl, isValidYouTubeUrl } from '../../components/PasteButton'
+import { PasteButton } from '../../components/PasteButton'
+import { extractYouTubeId, isValidInstagramUrl, isValidYouTubeUrl } from '../../lib/utils'
 import { 
   Plus, 
   Edit, 

@@ -1,32 +1,8 @@
-import { useState, useEffect } from 'react'
-import { Service } from '../types'
+import { useData } from './useData'
 import { servicesApi } from '../api/services'
+import { Service } from '../types'
 
 export function useServices() {
-  const [services, setServices] = useState<Service[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    loadServices()
-  }, [])
-
-  const loadServices = async () => {
-    try {
-      setLoading(true)
-      const data = await servicesApi.getAll()
-      setServices(data)
-      setError(null)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const refreshServices = () => {
-    loadServices()
-  }
-
+  const { data: services, loading, error, refresh: refreshServices } = useData<Service>(servicesApi.getAll)
   return { services, loading, error, refreshServices }
 }

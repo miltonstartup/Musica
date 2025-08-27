@@ -1,18 +1,11 @@
+import { createSupabaseApi } from './baseApi'
 import { supabase } from '../services/supabase'
 import type { ContactMessage, CreateContactMessageData } from '../types'
 
+const baseApi = createSupabaseApi<ContactMessage>('contact_messages')
+
 export const contactMessagesApi = {
-  // Get all contact messages
-  async getAll(): Promise<ContactMessage[]> {
-    const { data, error } = await supabase
-      .from('contact_messages')
-      .select('*')
-      .order('created_at', { ascending: false })
-
-    if (error) throw error
-    return data || []
-  },
-
+  ...baseApi,
   // Get unread contact messages
   async getUnread(): Promise<ContactMessage[]> {
     const { data, error } = await supabase
@@ -23,30 +16,6 @@ export const contactMessagesApi = {
 
     if (error) throw error
     return data || []
-  },
-
-  // Get contact message by ID
-  async getById(id: string): Promise<ContactMessage | null> {
-    const { data, error } = await supabase
-      .from('contact_messages')
-      .select('*')
-      .eq('id', id)
-      .maybeSingle()
-
-    if (error) throw error
-    return data
-  },
-
-  // Create new contact message
-  async create(messageData: CreateContactMessageData): Promise<ContactMessage> {
-    const { data, error } = await supabase
-      .from('contact_messages')
-      .insert([messageData])
-      .select()
-      .single()
-
-    if (error) throw error
-    return data
   },
 
   // Mark message as read
@@ -77,15 +46,5 @@ export const contactMessagesApi = {
 
     if (error) throw error
     return data
-  },
-
-  // Delete contact message
-  async delete(id: string): Promise<void> {
-    const { error } = await supabase
-      .from('contact_messages')
-      .delete()
-      .eq('id', id)
-
-    if (error) throw error
   }
 }

@@ -58,3 +58,34 @@ export function generateTimeSlots(date: string): string[] {
   
   return slots
 }
+
+// YouTube utility functions
+export const extractYouTubeId = (url: string): string | null => {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/,
+    /youtube\.com\/embed\/([a-zA-Z0-9_-]+)/,
+    /youtube\.com\/v\/([a-zA-Z0-9_-]+)/
+  ]
+  
+  for (const pattern of patterns) {
+    const match = url.match(pattern)
+    if (match && match[1]) {
+      return match[1]
+    }
+  }
+  return null
+}
+
+export const isValidInstagramUrl = (url: string): boolean => {
+  const instagramPatterns = [
+    /^https:\/\/(?:www\.)?instagram\.com\/p\/[a-zA-Z0-9_-]+\/?/,
+    /^https:\/\/(?:www\.)?instagram\.com\/reel\/[a-zA-Z0-9_-]+\/?/,
+    /^https:\/\/(?:www\.)?instagram\.com\/tv\/[a-zA-Z0-9_-]+\/?/
+  ]
+  
+  return instagramPatterns.some(pattern => pattern.test(url))
+}
+
+export const isValidYouTubeUrl = (url: string): boolean => {
+  return extractYouTubeId(url) !== null
+}

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { Plus, Edit2, Trash2, DollarSign, Clock, AlertCircle, CheckCircle } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../../components/Card'
 import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
 import { PasteButton } from '../../components/PasteButton'
+import { useAdminForm } from '../../hooks/useAdminForm'
 import { useServices } from '../../hooks/useServices'
 import { servicesApi } from '../../api/services'
 import { formatPrice } from '../../lib/utils'
@@ -12,76 +12,44 @@ import type { Service, CreateServiceData } from '../../types'
 
 export function ServicesManagement() {
   const { services, loading, error, refreshServices } = useServices()
-  const [editingService, setEditingService] = useState<Service | null>(null)
-  const [isCreating, setIsCreating] = useState(false)
   const [deleting, setDeleting] = useState<string | null>(null)
-  const [formData, setFormData] = useState<CreateServiceData>({
+  
+  const initialFormData: CreateServiceData = {
     name: '',
     description: '',
     price: 0,
     duration_minutes: 60,
     image_url: ''
+  }
+  
+  const {
+    editingItem: editingService,
+    isCreating,
+    formData,
+    setFormData,
+    submitting,
+    formError,
+    handleEdit,
+    handleCreate,
+    handleCancel,
+    handleSubmit
+  } = useAdminForm<Service, CreateServiceData>({
+    initialData: initialFormData,
+    createFn: servicesApi.create,
+    updateFn: servicesApi.update,
+    onSuccess: refreshServices
   })
-  const [submitting, setSubmitting] = useState(false)
-  const [formError, setFormError] = useState<string | null>(null)
 
-  const handleEdit = (service: Service) => {
-    setEditingService(service)
-    setFormData({
-      name: service.name,
-      description: service.description || '',
-      price: service.price,
-      duration_minutes: service.duration_minutes,
-      image_url: service.image_url || ''
-    })
-    setIsCreating(false)
-    setFormError(null)
-  }
+  const mapServiceToFormData = (service: Service): CreateServiceData => ({
+    name: service.name,
+    description: service.description || '',
+    price: service.price,
+    duration_minutes: service.duration_minutes,
+    image_url: service.image_url || ''
+  })
 
-  const handleCreate = () => {
-    setEditingService(null)
-    setFormData({
-      name: '',
-      description: '',
-      price: 0,
-      duration_minutes: 60,
-      image_url: ''
-    })
-    setIsCreating(true)
-    setFormError(null)
-  }
-
-  const handleCancel = () => {
-    setEditingService(null)
-    setIsCreating(false)
-    setFormData({
-      name: '',
-      description: '',
-      price: 0,
-      duration_minutes: 60,
-      image_url: ''
-    })
-    setFormError(null)
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSubmitting(true)
-    setFormError(null)
-
-    try {
-      if (editingService) {
-        await servicesApi.update(editingService.id, formData)
-      } else {
-        await servicesApi.create(formData)
-      }
-      refreshServices()
-      handleCancel()
-    } catch (error) {
-      setFormError(error instanceof Error ? error.message : 'An error occurred')
-    } finally {
-      setSubmitting(false)
-    }
+  const handleEditService = (service: Service) => {
+    handleEdit(service, mapServiceToFormData)
   }
 
   const handleDelete = async (id: string) => {
@@ -299,7 +267,7 @@ export function ServicesManagement() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleEdit(service)}
+                      onClick={() => handleEditService(service)}
                     >
                       <Edit2 className="w-4 h-4" />
                     </Button>
