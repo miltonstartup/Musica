@@ -137,11 +137,12 @@ function GalleryPage() {
             filteredMedia.map((item) => {
               const IconComponent = getMediaIcon(item.media_type)
               return (
-                <Card
+                <div
                   key={item.id}
                   className="cursor-pointer hover:shadow-xl transition-shadow group"
                   onClick={() => openLightbox(item)}
                 >
+                  <Card>
                   <div className="relative h-48 overflow-hidden">
                     {item.media_type === 'photo' && (
                       <img
@@ -190,7 +191,8 @@ function GalleryPage() {
                       <span>{new Date(item.created_at).toLocaleDateString()}</span>
                     </div>
                   </CardContent>
-                </Card>
+                  </Card>
+                </div>
               )
             })
           )}

@@ -82,7 +82,6 @@ export interface ContactMessage {
   is_read: boolean
   admin_response: string | null // Ensure this is nullable
   created_at: string
-  updated_at: string // Added based on database schema
   updated_at: string
 }
 

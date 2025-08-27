@@ -231,7 +231,7 @@ export function EnhancedMediaManagement() {
       media_url: item.media_url,
       thumbnail_url: item.thumbnail_url || '',
       category: item.category,
-      tags: Array.isArray(item.tags) ? item.tags.join(', ') : '',
+      tags: Array.isArray(item.tags) ? item.tags.join(', ') : (item.tags || ''),
       is_featured: item.is_featured || false
     })
     setEditingItem(item)
