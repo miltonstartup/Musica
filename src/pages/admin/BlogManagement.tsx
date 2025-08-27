@@ -276,7 +276,7 @@ export function BlogManagement() {
                       allowUrlInput={true}
                     />
                   </div>
-                    placeholder="Write your blog post content here...&#10;&#10;Use **text** for headings and subheadings.&#10;Separate paragraphs with double line breaks."
+                    placeholder="Write your blog post content here...
                     required
                   />
                   <p className="text-sm text-slate-500 mt-2">
