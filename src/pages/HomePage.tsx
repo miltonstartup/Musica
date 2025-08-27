@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
+import { Calendar, ArrowRight, BookOpen, Award, Music, Users, Star } from 'lucide-react'
 import { Button } from '../components/Button'
 import { Card, CardContent } from '../components/Card'
 import { useServices } from '../hooks/useServices'

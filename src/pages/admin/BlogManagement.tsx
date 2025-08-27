@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
-import { Card, CardContent, CardHeader } from '../../components/Card'
+import { Plus, Edit2, Trash2, Eye, AlertCircle, FileText } from 'lucide-react'
+import { Card, CardContent, CardHeader } from '../../components/Card' // Keep this import
 import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
 import { ImageUpload } from '../../components/ImageUpload'

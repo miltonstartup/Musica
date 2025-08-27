@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Image as ImageIcon, Video, Youtube, Instagram, Star, Filter, X } from 'lucide-react'
+import { Image as ImageIcon, Video, Youtube, Instagram, Star, Filter, X } from 'lucide-react' // Keep these imports
 import { Card, CardContent, CardHeader } from '../components/Card'
 import { Button } from '../components/Button'
 import { Spinner } from '../components/Spinner'

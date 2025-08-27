@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
+import { Music, Mail, Phone, MapPin, Facebook, Instagram, Youtube } from 'lucide-react'
 
 export function Footer() {
   return (

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useMediaGallery } from '../../hooks/useMediaGallery'
-import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
-import { Card, CardContent, CardHeader } from '../../components/Card'
+import { Card, CardContent, CardHeader } from '../../components/Card' // Keep this import
+import { Plus, Edit, Trash2, Image, Video, Youtube, Instagram, Star, Filter, X, Eye, Upload, Save, AlertCircle, CheckCircle, ExternalLink } from 'lucide-react'
 import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
 import { PasteButton } from '../../components/PasteButton'
@@ -9,20 +9,7 @@ import { ImageUpload } from '../../components/ImageUpload'
 import { extractYouTubeId, isValidInstagramUrl, isValidYouTubeUrl } from '../../lib/utils'
 import { 
   Plus, 
-  Edit, 
-  Trash2, 
-  Image, 
-  Video, 
-  Youtube, 
-  Instagram,
-  Star,
-  Eye,
-  Upload,
-  Save,
-  X,
-  AlertCircle,
-  CheckCircle,
-  ExternalLink
+  // Removed duplicate imports
 } from 'lucide-react'
 
 type MediaFormData = {
@@ -372,7 +359,7 @@ export function EnhancedMediaManagement() {
                       </div>
                     ) : (
                       <div className="flex space-x-2">
-                        <input
+                        <input // Keep this input
                           type="url"
                           required
                           value={formData.media_url}

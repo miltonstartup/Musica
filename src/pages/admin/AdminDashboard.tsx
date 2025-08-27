@@ -8,6 +8,7 @@ import {
   Mail,
   Image as ImageIcon,
   Music,
+  MessageSquare
   MessageSquare,
   AlertCircle
 } from 'lucide-react'

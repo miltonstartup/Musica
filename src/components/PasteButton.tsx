@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Clipboard, Check } from 'lucide-react'
-import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
 
 interface PasteButtonProps {
   onPaste: (text: string) => void

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
+import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../components/Card'
 import { Button } from '../components/Button'
 import { useBlogPosts } from '../hooks/useBlogPosts'

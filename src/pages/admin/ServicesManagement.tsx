@@ -1,6 +1,6 @@
 import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
 import { Plus, Edit2, Trash2, DollarSign, Clock, AlertCircle, CheckCircle } from 'lucide-react'
-import { Card, CardContent, CardHeader } from '../../components/Card'
+import { Card, CardContent, CardHeader } from '../../components/Card' // Keep this import
 import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
 import { ImageUpload } from '../../components/ImageUpload'

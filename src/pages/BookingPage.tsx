@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
-import { z } from 'zod'
 import { Calendar as CalendarIcon, Clock, User, Mail, MessageSquare, CheckCircle, AlertCircle } from 'lucide-react'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { DayPicker } from 'react-day-picker'
 import 'react-day-picker/dist/style.css'
 import { Button } from '../components/Button'

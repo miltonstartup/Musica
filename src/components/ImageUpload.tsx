@@ -1,6 +1,6 @@
 import React, { useState, useRef, DragEvent, ChangeEvent } from 'react';
 import { Upload, X, Image as ImageIcon, AlertCircle, Link as LinkIcon } from 'lucide-react';
-import { Button } from './Button';
+import { Button } from './Button'; // Keep this import
 import { PasteButton } from './PasteButton';
 import { useImageUpload } from '../hooks/useImageUpload';
 

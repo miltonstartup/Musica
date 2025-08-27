@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Award, Users, Music } from 'lucide-react'
+import { ArrowRight, Award, Users, Music, Calendar } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../components/Card'
 import { Button } from '../components/Button'
 import { Spinner } from '../components/Spinner'
