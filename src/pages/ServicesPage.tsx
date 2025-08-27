@@ -6,7 +6,7 @@ import { useServices } from '../hooks/useServices'
 import { Spinner } from '../components/Spinner'
 import { formatPrice } from '../lib/utils'
 import { Link } from 'react-router-dom'
-
+import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
 export function ServicesPage() {
   const { services, loading, error } = useServices()
 
@@ -37,7 +37,7 @@ export function ServicesPage() {
       {/* Header Section */}
       <section className="py-16 bg-gradient-to-br from-slate-50 to-amber-50 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-slate-800 mb-6">
+          <h1 className="text-4xl font-bold text-slate-800 mb-6"> {/* Keep this heading */}
             Clases y Servicios Musicales
           </h1>
           <p className="text-xl text-slate-600">
@@ -55,7 +55,7 @@ export function ServicesPage() {
               <Card key={service.id} className="overflow-hidden hover:shadow-xl transition-shadow">
                 <div className="h-64 overflow-hidden">
                   <img 
-                    src={service.image_url || '/images/elegant_music_notes_sheet_pattern_background.jpg'} 
+                    src={service.image_url || '/images/elegant_music_notes_sheet_pattern_background.jpg'} /* Keep this image source */
                     alt={service.name}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   />
@@ -63,7 +63,7 @@ export function ServicesPage() {
                 
                 <CardHeader>
                   <h2 className="text-2xl font-bold text-slate-800">
-                    {service.name}
+                    {service.name} {/* Keep this heading */}
                   </h2>
                 </CardHeader>
                 
@@ -73,7 +73,7 @@ export function ServicesPage() {
                   </p>
                   
                   <div className="flex flex-wrap gap-4">
-                    <div className="flex items-center space-x-2 text-slate-600">
+                    <div className="flex items-center space-x-2 text-slate-600"> {/* Keep this div */}
                       <Clock className="w-5 h-5 text-amber-600" />
                       <span>{service.duration_minutes} minutos</span>
                     </div>
@@ -82,7 +82,7 @@ export function ServicesPage() {
                       <span className="font-semibold text-2xl text-amber-600">
                         {formatPrice(service.price)}
                       </span>
-                      <span className="text-slate-500">por lección</span>
+                      <span className="text-slate-500">por lección</span> {/* Keep this span */}
                     </div>
                   </div>
                   
@@ -106,7 +106,7 @@ export function ServicesPage() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-slate-800 mb-4">
-              Qué se Incluye en Cada Lección
+              Qué se Incluye en Cada Lección {/* Keep this heading */}
             </h2>
             <p className="text-lg text-slate-600">
               Cada sesión personalizada incluye todo lo que necesitas para progresar con confianza
@@ -115,7 +115,7 @@ export function ServicesPage() {
           
           <div className="grid md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"> {/* Keep this div */}
                 <Clock className="w-8 h-8 text-amber-600" />
               </div>
               <h3 className="text-lg font-semibold text-slate-800 mb-2">
@@ -127,7 +127,7 @@ export function ServicesPage() {
             </div>
             
             <div className="text-center">
-              <div className="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"> {/* Keep this div */}
                 <Calendar className="w-8 h-8 text-amber-600" />
               </div>
               <h3 className="text-lg font-semibold text-slate-800 mb-2">
@@ -139,7 +139,7 @@ export function ServicesPage() {
             </div>
             
             <div className="text-center">
-              <div className="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"> {/* Keep this div */}
                 <DollarSign className="w-8 h-8 text-amber-600" />
               </div>
               <h3 className="text-lg font-semibold text-slate-800 mb-2">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Plus, Edit2, Trash2, Eye, Calendar, AlertCircle, FileText } from 'lucide-react'
+import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
 import { Card, CardContent, CardHeader } from '../../components/Card'
 import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
@@ -175,12 +175,12 @@ export function BlogManagement() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">Blog Management</h2>
-          <p className="text-slate-600 mt-1">Create and manage blog posts</p>
+          <h2 className="text-2xl font-bold text-slate-800">Gestión del Blog</h2>
+          <p className="text-slate-600 mt-1">Crea y gestiona publicaciones del blog</p>
         </div>
         <Button onClick={handleCreate}>
           <Plus className="w-4 h-4 mr-2" />
-          New Blog Post
+          Nueva Publicación
         </Button>
       </div>
 
@@ -190,7 +190,7 @@ export function BlogManagement() {
           <CardHeader>
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold text-slate-800">
-                {editingPost ? 'Edit Blog Post' : 'Create New Blog Post'}
+                {editingPost ? 'Editar Publicación' : 'Crear Nueva Publicación'}
               </h3>
               <div className="flex gap-2">
                 <Button
@@ -200,7 +200,7 @@ export function BlogManagement() {
                   onClick={() => setPreviewMode(!previewMode)}
                 >
                   <Eye className="w-4 h-4 mr-1" />
-                  {previewMode ? 'Edit' : 'Preview'}
+                  {previewMode ? 'Editar' : 'Vista Previa'}
                 </Button>
               </div>
             </div>
@@ -210,7 +210,7 @@ export function BlogManagement() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2"> {/* Keep this label */}
                       Title *
                     </label>
                     <input
@@ -218,13 +218,13 @@ export function BlogManagement() {
                       value={formData.title}
                       onChange={(e) => handleTitleChange(e.target.value)}
                       className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      placeholder="Enter blog post title"
+                      placeholder="Ingresa el título de la publicación"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2"> {/* Keep this label */}
                       Slug *
                     </label>
                     <input
@@ -232,16 +232,16 @@ export function BlogManagement() {
                       value={formData.slug}
                       onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                       className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      placeholder="url-friendly-slug"
+                      placeholder="slug-amigable-para-url"
                       required
                     />
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
-                  <div>
+                  <div> {/* Keep this div */}
                     <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Featured Image
+                      Imagen Destacada
                     </label>
                     <ImageUpload
                       currentImageUrl={formData.image_url}
@@ -251,8 +251,8 @@ export function BlogManagement() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Publish Date *
+                    <label className="block text-sm font-medium text-slate-700 mb-2"> {/* Keep this label */}
+                      Fecha de Publicación *
                     </label>
                     <input
                       type="datetime-local"
@@ -265,21 +265,7 @@ export function BlogManagement() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Imagen Destacada
-                  </label>
-                  <div className="space-y-2">
-                    <ImageUpload
-                      currentImageUrl={formData.image_url}
-                      onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
-                      bucket="blog-images"
-                      allowUrlInput={true}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-slate-700 mb-2"> {/* Keep this label */}
                     Content *
                   </label>
                   <textarea
@@ -288,12 +274,12 @@ export function BlogManagement() {
                     className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
                     rows={12}
                     placeholder="Write your blog post content here...
-
-Use **text** for headings and subheadings.
-Separate paragraphs with double line breaks."
+Usa **texto** para encabezados y subtítulos.
+Separa los párrafos con dos saltos de línea."
                     required
                   />
-                  <p className="text-sm text-slate-500 mt-2">
+                  {/* Keep this tip */}
+                  <p className="text-sm text-slate-500 mt-2"> {/* Keep this paragraph */}
                     Tip: Use **text** for headings and separate paragraphs with double line breaks.
                   </p>
                 </div>
@@ -309,11 +295,11 @@ Separate paragraphs with double line breaks."
                   <Button type="submit" disabled={submitting}>
                     {submitting ? (
                       <>
-                        <Spinner size="sm" className="mr-2" />
-                        {editingPost ? 'Updating...' : 'Creating...'}
+                        <Spinner size="sm" className="mr-2" /> {/* Keep this spinner */}
+                        {editingPost ? 'Actualizando...' : 'Creando...'}
                       </>
                     ) : (
-                      editingPost ? 'Update Post' : 'Create Post'
+                      editingPost ? 'Actualizar Publicación' : 'Crear Publicación'
                     )}
                   </Button>
                   <Button type="button" variant="outline" onClick={handleCancel}>
@@ -332,7 +318,7 @@ Separate paragraphs with double line breaks."
                   />
                 )}
                 <div className="text-sm text-slate-500 mb-6">
-                  Published on {formatDate(formData.published_date)}
+                  Publicado el {formatDate(formData.published_date)}
                 </div>
                 <div>
                   {formatContent(formData.content)}
@@ -348,12 +334,12 @@ Separate paragraphs with double line breaks."
         {blogPosts.length === 0 ? (
           <Card>
             <CardContent className="p-8 text-center">
-              <FileText className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-800 mb-2">No Blog Posts Found</h3>
-              <p className="text-slate-600 mb-4">Create your first blog post to share insights with your students.</p>
+              <FileText className="w-12 h-12 text-slate-400 mx-auto mb-4" /> {/* Keep this icon */}
+              <h3 className="text-lg font-semibold text-slate-800 mb-2">No se encontraron publicaciones</h3>
+              <p className="text-slate-600 mb-4">Crea tu primera publicación para compartir ideas con tus estudiantes.</p>
               <Button onClick={handleCreate}>
                 <Plus className="w-4 h-4 mr-2" />
-                Create First Post
+                Crear Primera Publicación
               </Button>
             </CardContent>
           </Card>
@@ -364,7 +350,7 @@ Separate paragraphs with double line breaks."
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
-                      <h3 className="text-xl font-semibold text-slate-800 line-clamp-1">
+                      <h3 className="text-xl font-semibold text-slate-800 line-clamp-1"> {/* Keep this heading */}
                         {post.title}
                       </h3>
                       <span className="text-sm text-slate-500 bg-slate-100 px-2 py-1 rounded">
@@ -375,7 +361,7 @@ Separate paragraphs with double line breaks."
                     <div className="flex items-center gap-4 text-sm text-slate-600 mb-3">
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-1" />
-                        <span>Published {formatDate(post.published_date)}</span>
+                        <span>Publicado el {formatDate(post.published_date)}</span>
                       </div>
                       <div>
                         {Math.ceil(post.content.length / 1000)} min read

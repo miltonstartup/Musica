@@ -249,7 +249,7 @@ export function ImageUpload({
       )}
 
       {!previewUrl && !showUrlInput && (
-        <div className="text-center">
+        <div className="text-center"> {/* Keep this div */}
           <Button
             type="button"
             variant="outline"

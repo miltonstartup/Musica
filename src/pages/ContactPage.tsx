@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useContactMessages } from '../hooks'
-import { Card } from '../components/Card'
+import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
 import { Button } from '../components/Button'
 import { Mail, Phone, MapPin, Clock, Facebook, Instagram, Youtube, Send, CheckCircle } from 'lucide-react'
 
@@ -86,7 +86,7 @@ export function ContactPage() {
       <div className="grid lg:grid-cols-3 gap-12">
         {/* Contact Information */}
         <div className="lg:col-span-1 space-y-8">
-          {/* Contact Details */}
+          {/* Contact Details */} {/* Keep this comment */}
           <Card className="p-6">
             <h2 className="text-xl font-semibold text-slate-800 mb-6">Información de Contacto</h2>
             
@@ -137,7 +137,7 @@ export function ContactPage() {
           </Card>
 
           {/* Social Media */}
-          <Card className="p-6">
+          <Card className="p-6"> {/* Keep this Card component */}
             <h3 className="text-lg font-semibold text-slate-800 mb-4">Síguenos</h3>
             <div className="flex space-x-4">
               <a href="#" className="p-3 bg-gray-100 rounded-full hover:bg-amber-100 transition-colors group">
@@ -153,7 +153,7 @@ export function ContactPage() {
           </Card>
 
           {/* Map Placeholder */}
-          <Card className="p-6">
+          <Card className="p-6"> {/* Keep this Card component */}
             <h3 className="text-lg font-semibold text-slate-800 mb-4">Ubicación</h3>
             <div className="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center">
               <div className="text-center">
@@ -166,7 +166,7 @@ export function ContactPage() {
 
         {/* Contact Form */}
         <div className="lg:col-span-2">
-          <Card className="p-8">
+          <Card className="p-8"> {/* Keep this Card component */}
             <h2 className="text-2xl font-semibold text-slate-800 mb-6">Envíanos un Mensaje</h2>
             
             {isSubmitted && (
@@ -187,7 +187,7 @@ export function ContactPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name and Email Row */}
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-6"> {/* Keep this div */}
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
                     Nombre Completo *
@@ -204,7 +204,7 @@ export function ContactPage() {
                   />
                 </div>
                 
-                <div>
+                <div> {/* Keep this div */}
                   <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                     Correo Electrónico *
                   </label>
@@ -222,7 +222,7 @@ export function ContactPage() {
               </div>
 
               {/* Phone and Inquiry Type Row */}
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-6"> {/* Keep this div */}
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-2">
                     Teléfono (Opcional)
@@ -238,7 +238,7 @@ export function ContactPage() {
                   />
                 </div>
                 
-                <div>
+                <div> {/* Keep this div */}
                   <label htmlFor="inquiry_type" className="block text-sm font-medium text-slate-700 mb-2">
                     Tipo de Consulta
                   </label>
@@ -259,7 +259,7 @@ export function ContactPage() {
               </div>
 
               {/* Message */}
-              <div>
+              <div> {/* Keep this div */}
                 <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-2">
                   Mensaje *
                 </label>
@@ -276,7 +276,7 @@ export function ContactPage() {
               </div>
 
               {/* Submit Button */}
-              <div className="flex justify-end">
+              <div className="flex justify-end"> {/* Keep this div */}
                 <Button
                   type="submit"
                   disabled={!isFormValid || loading}

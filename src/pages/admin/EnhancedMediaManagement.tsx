@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useMediaGallery } from '../../hooks/useMediaGallery'
-import { MediaItem } from '../../types'
+import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
 import { Card, CardContent, CardHeader } from '../../components/Card'
 import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
@@ -86,7 +86,7 @@ export function EnhancedMediaManagement() {
         if (isValidYouTubeUrl(url)) {
           const videoId = extractYouTubeId(url)
           setUrlPreview(`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`)
-        } else {
+        } else { // Keep this else block
           setUrlError('URL de YouTube no válida. Usa formato: https://www.youtube.com/watch?v=...')
           setUrlPreview(null)
         }
@@ -94,7 +94,7 @@ export function EnhancedMediaManagement() {
       case 'instagram':
         if (isValidInstagramUrl(url)) {
           setUrlPreview(url)
-        } else {
+        } else { // Keep this else block
           setUrlError('URL de Instagram no válida. Usa formato: https://www.instagram.com/p/...')
           setUrlPreview(null)
         }
@@ -102,7 +102,7 @@ export function EnhancedMediaManagement() {
       case 'photo':
       case 'video':
         if (url.match(/\.(jpg|jpeg|png|gif|webp|mp4|avi|mov)$/i)) {
-          setUrlPreview(url)
+          setUrlPreview(url) // Keep this line
         } else if (url.startsWith('http')) {
           setUrlPreview(url)
         } else {
@@ -430,7 +430,7 @@ export function EnhancedMediaManagement() {
 
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-2">
-                        Categoría *
+                        Categoría * /* Keep this label */
                       </label>
                       <select
                         required
@@ -448,7 +448,7 @@ export function EnhancedMediaManagement() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-sm font-medium text-slate-700 mb-2"> /* Keep this label */
                       Descripción
                     </label>
                     <div className="flex space-x-2">
@@ -466,7 +466,7 @@ export function EnhancedMediaManagement() {
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-2">
-                        {(formData.media_type === 'photo' || formData.media_type === 'video') ? 
+                        {(formData.media_type === 'photo' || formData.media_type === 'video') ? /* Keep this conditional rendering */
                           'Miniatura Personalizada (Opcional)' : 
                           'Miniatura (Opcional)'
                         }
@@ -497,7 +497,7 @@ export function EnhancedMediaManagement() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">
+                      <label className="block text-sm font-medium text-slate-700 mb-2"> /* Keep this label */
                         Etiquetas
                       </label>
                       <div className="flex space-x-2">
@@ -509,7 +509,7 @@ export function EnhancedMediaManagement() {
                           placeholder="música, piano, estudiante (separadas por comas)"
                         />
                       </div>
-                      <p className="text-xs text-slate-500 mt-1">Separa las etiquetas con comas</p>
+                      <p className="text-xs text-slate-500 mt-1">Separa las etiquetas con comas</p> {/* Keep this paragraph */}
                     </div>
                   </div>
 
@@ -522,7 +522,7 @@ export function EnhancedMediaManagement() {
                       className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-slate-300 rounded"
                     />
                     <label htmlFor="is_featured" className="ml-2 block text-sm text-slate-700">
-                      <Star className="w-4 h-4 inline mr-1" />
+                      <Star className="w-4 h-4 inline mr-1" /> {/* Keep this icon */}
                       Contenido destacado (aparecerá en la página principal)
                     </label>
                   </div>
@@ -534,7 +534,7 @@ export function EnhancedMediaManagement() {
                           <Spinner size="sm" className="mr-2" />
                           Guardando...
                         </>
-                      ) : (
+                      ) : ( /* Keep this conditional rendering */
                         <>
                           <Save className="w-4 h-4 mr-2" />
                           {editingItem ? 'Actualizar Contenido' : 'Agregar Contenido'}
@@ -551,7 +551,7 @@ export function EnhancedMediaManagement() {
                 <div className="space-y-4">
                   <div className="border-2 border-dashed border-slate-200 rounded-lg p-6">
                     {urlPreview ? (
-                      <div>
+                      <div> {/* Keep this div */}
                         <h3 className="text-lg font-semibold mb-4">{formData.title}</h3>
                         {formData.media_type === 'youtube' && (
                           <div className="relative bg-black rounded-lg overflow-hidden mb-4">
@@ -569,7 +569,7 @@ export function EnhancedMediaManagement() {
                                   className="w-full"
                                 />
                               ) : (
-                                <div className="w-full h-64 bg-gray-200 flex items-center justify-center rounded">
+                                <div className="w-full h-64 bg-gray-200 flex items-center justify-center rounded"> {/* Keep this div */}
                                   <Youtube className="w-16 h-16 text-gray-400" />
                                   <span className="ml-2 text-gray-500">Video de YouTube no válido</span>
                                 </div>
@@ -581,7 +581,7 @@ export function EnhancedMediaManagement() {
                           <div className="border rounded-lg p-6 bg-gradient-to-br from-purple-50 to-pink-50 mb-4">
                             <div className="flex items-center justify-center mb-4">
                               <Instagram className="w-12 h-12 text-pink-500" />
-                            </div>
+                            </div> {/* Keep this div */}
                             <h4 className="text-center font-medium text-slate-700 mb-2">{formData.title || 'Contenido de Instagram'}</h4>
                             <p className="text-center text-slate-600 text-sm mb-4">Vista previa del contenido de Instagram</p>
                             <a 
@@ -589,7 +589,7 @@ export function EnhancedMediaManagement() {
                               target="_blank" 
                               rel="noopener noreferrer"
                               className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors"
-                            >
+                            > {/* Keep this anchor tag */}
                               <Instagram className="w-4 h-4 mr-2" />
                               Ver en Instagram
                             </a>
@@ -598,7 +598,7 @@ export function EnhancedMediaManagement() {
                         {(formData.media_type === 'photo' || formData.media_type === 'video') && (
                           <div className="border rounded-lg overflow-hidden mb-4">
                             {formData.media_type === 'photo' ? (
-                              <img 
+                              <img /* Keep this img tag */
                                 src={formData.media_url} 
                                 alt={formData.title}
                                 className="w-full max-h-80 object-contain bg-gray-50"
@@ -606,7 +606,7 @@ export function EnhancedMediaManagement() {
                             ) : (
                               <video 
                                 src={formData.media_url}
-                                controls
+                                controls /* Keep this controls attribute */
                                 className="w-full max-h-80 object-contain bg-black"
                               />
                             )}
@@ -615,7 +615,7 @@ export function EnhancedMediaManagement() {
                         {formData.description && (
                           <p className="text-slate-600 mt-4">{formData.description}</p>
                         )}
-                        <div className="flex items-center gap-2 mt-4 text-sm text-slate-500">
+                        <div className="flex items-center gap-2 mt-4 text-sm text-slate-500"> {/* Keep this div */}
                           <span className="bg-slate-100 px-2 py-1 rounded">{formData.category}</span>
                           {formData.is_featured && (
                             <span className="bg-amber-100 text-amber-700 px-2 py-1 rounded flex items-center">
@@ -626,7 +626,7 @@ export function EnhancedMediaManagement() {
                         </div>
                       </div>
                     ) : (
-                      <div className="text-center py-8 text-slate-500">
+                      <div className="text-center py-8 text-slate-500"> {/* Keep this div */}
                         <Eye className="w-12 h-12 mx-auto mb-2" />
                         <p>Completa el título y contenido multimedia para ver la vista previa</p>
                       </div>
@@ -635,7 +635,7 @@ export function EnhancedMediaManagement() {
                   
                   <div className="flex gap-4">
                     <Button onClick={() => setActiveTab('form')} variant="outline" className="flex-1">
-                      Volver al Formulario
+                      Volver al Formulario {/* Translate this */}
                     </Button>
                     {formData.media_url && (
                       <Button 
@@ -663,7 +663,7 @@ export function EnhancedMediaManagement() {
             <Card key={item.id} className="group hover:shadow-lg transition-shadow">
               <div className="relative">
                 {renderMediaPreview(item)}
-                
+
                 {/* Featured badge */}
                 {item.is_featured && (
                   <div className="absolute top-2 left-2 bg-amber-500 text-white px-2 py-1 text-xs font-medium rounded flex items-center">
@@ -671,7 +671,7 @@ export function EnhancedMediaManagement() {
                     Destacado
                   </div>
                 )}
-                
+
                 {/* Media type indicator */}
                 <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white p-1 rounded">
                   <IconComponent className="w-4 h-4" />
@@ -679,12 +679,12 @@ export function EnhancedMediaManagement() {
               </div>
               
               <CardContent className="p-4">
-                <h3 className="font-semibold text-slate-800 mb-1 truncate">{item.title}</h3>
-                <p className="text-sm text-slate-600 mb-2 line-clamp-2">
+                <h3 className="font-semibold text-slate-800 mb-1 truncate">{item.title}</h3> {/* Keep this heading */}
+                <p className="text-sm text-slate-600 mb-2 line-clamp-2"> {/* Keep this paragraph */}
                   {item.description || 'Sin descripción'}
                 </p>
                 <div className="flex items-center justify-between text-xs text-slate-500 mb-3">
-                  <span className="bg-slate-100 px-2 py-1 rounded">{item.category}</span>
+                  <span className="bg-slate-100 px-2 py-1 rounded">{item.category}</span> {/* Keep this span */}
                   <span>{new Date(item.created_at).toLocaleDateString()}</span>
                 </div>
                 

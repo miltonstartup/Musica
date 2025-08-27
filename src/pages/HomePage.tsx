@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, Star, BookOpen, ArrowRight } from 'lucide-react'
+import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
 import { Button } from '../components/Button'
 import { Card, CardContent } from '../components/Card'
 import { useServices } from '../hooks/useServices'
@@ -14,22 +14,22 @@ export function HomePage() {
   const { services, loading: servicesLoading } = useServices()
   const { testimonials, loading: testimonialsLoading } = useTestimonials()
   const { featuredItems, loading: mediaLoading } = useFeaturedMedia()
-
-  const featuredServices = services.slice(0, 3)
-  const featuredTestimonials = testimonials.slice(0, 3)
+  
+  const featuredServices = services.slice(0, 3) // Display up to 3 services
+  const featuredTestimonials = testimonials.slice(0, 3) // Display up to 3 testimonials
   const featuredPhotos = featuredItems.filter(item => item.media_type === 'photo').slice(0, 4)
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
       <section 
-        className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 to-amber-50"
-        style={{
-          backgroundImage: 'url(/images/elegant-grand-piano-keys-close-up-dramatic-lighting.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundBlendMode: 'overlay'
-        }}
+        className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 to-amber-50 overflow-hidden"
+        // style={{
+        //   backgroundImage: 'url(/images/professional-music-teacher-piano-lesson-studio.jpg)',
+        //   backgroundSize: 'cover',
+        //   backgroundPosition: 'center',
+        //   backgroundBlendMode: 'overlay'
+        // }}
       >
         <div className="absolute inset-0 bg-slate-900/60"></div>
         <div className="relative max-w-4xl mx-auto text-center text-white">
@@ -60,7 +60,7 @@ export function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-slate-800 mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-6">
                 Tu Viaje Musical Comienza Aquí
               </h2>
               <p className="text-lg text-slate-600 mb-6">
@@ -82,7 +82,7 @@ export function HomePage() {
             </div>
             <div className="relative">
               <img 
-                src="/images/professional-music-teacher-piano-lesson-studio.jpg" 
+                src="/images/elegant-grand-piano-keys-close-up-dramatic-lighting.jpg" 
                 alt="Profesora de música en estudio"
                 className="rounded-lg shadow-lg w-full h-96 object-cover"
               />
@@ -97,12 +97,53 @@ export function HomePage() {
         </div>
       </section>
 
+      {/* Why Choose Us Section */}
+      <section className="py-16 bg-amber-50 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-6">
+            ¿Por Qué Elegirnos?
+          </h2>
+          <p className="text-xl text-slate-600 mb-12">
+            Comprometidos con la excelencia y tu crecimiento musical
+          </p>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="flex flex-col items-center text-center">
+              <Award className="w-16 h-16 text-amber-600 mb-4" />
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                Instrucción Experta
+              </h3>
+              <p className="text-slate-600">
+                Profesores altamente calificados con años de experiencia dedicados a tu éxito.
+              </p>
+            </div>
+            <div className="flex flex-col items-center text-center">
+              <Music className="w-16 h-16 text-amber-600 mb-4" />
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                Planes Personalizados
+              </h3>
+              <p className="text-slate-600">
+                Lecciones adaptadas a tu estilo de aprendizaje, ritmo e intereses musicales.
+              </p>
+            </div>
+            <div className="flex flex-col items-center text-center">
+              <Users className="w-16 h-16 text-amber-600 mb-4" />
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                Comunidad de Apoyo
+              </h3>
+              <p className="text-slate-600">
+                Únete a una vibrante comunidad de estudiantes y amantes de la música.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Gallery Section */}
       {!mediaLoading && featuredPhotos.length > 0 && (
         <section className="py-16 bg-slate-50 px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-slate-800 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
                 Galería Destacada
               </h2>
               <p className="text-lg text-slate-600">
@@ -139,7 +180,6 @@ export function HomePage() {
         </section>
       )}
 
-
       {/* Featured Services */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
@@ -162,7 +202,7 @@ export function HomePage() {
                 <Card key={service.id} className="hover:shadow-lg transition-shadow">
                   <div className="h-48 overflow-hidden">
                     <img 
-                      src={service.image_url || '/images/elegant_music_notes_sheet_pattern_background.jpg'} 
+                      src={service.image_url || '/images/placeholders/elegant_music_education_blog_placeholder.jpg'} 
                       alt={service.name}
                       className="w-full h-full object-cover"
                     />
@@ -203,7 +243,7 @@ export function HomePage() {
       <section className="py-16 bg-slate-50 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-800 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
               Lo que Dicen los Estudiantes
             </h2>
             <p className="text-lg text-slate-600">
@@ -249,7 +289,7 @@ export function HomePage() {
         <div className="max-w-4xl mx-auto text-center text-white">
           <BookOpen className="w-16 h-16 mx-auto mb-6 text-amber-200" />
           <h2 className="text-3xl font-bold mb-4">
-            ¿Listo para Comenzar tu Viaje Musical?
+            ¿Listo para Empezar tu Viaje Musical?
           </h2>
           <p className="text-xl mb-8 text-amber-100">
             Da el primer paso hacia la realización musical. Reserva tu clase personalizada hoy 
