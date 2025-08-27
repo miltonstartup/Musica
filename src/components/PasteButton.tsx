@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Clipboard, Check } from 'lucide-react'
+import { Button } from './Button'
 
 interface PasteButtonProps {
   onPaste: (text: string) => void

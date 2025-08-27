@@ -7,10 +7,6 @@ import { Spinner } from '../../components/Spinner'
 import { PasteButton } from '../../components/PasteButton'
 import { ImageUpload } from '../../components/ImageUpload'
 import { extractYouTubeId, isValidInstagramUrl, isValidYouTubeUrl } from '../../lib/utils'
-import { 
-  Plus, 
-  // Removed duplicate imports
-} from 'lucide-react'
 
 type MediaFormData = {
   title: string

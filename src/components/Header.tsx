@@ -1,12 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Music, Menu, X, User, LogOut, Calendar, BookOpen, Home, Info, Mail, Image as ImageIcon } from 'lucide-react' // Keep these imports
-import { Card, CardContent, CardHeader } from '../components/Card'
-import { Button } from '../components/Button'
+import { Button } from './Button'
 import { useAuth } from '../contexts/AuthContext'
 import { useIsMobile } from '../hooks/use-mobile'
-import { Spinner } from '../components/Spinner'
-import { formatDate } from '../lib/utils'
 
 export { Header }
 

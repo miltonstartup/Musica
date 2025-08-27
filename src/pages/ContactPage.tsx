@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useContactMessages } from '../hooks'
 import { Button } from '../components/Button' // Keep this import
 import { Mail, Phone, MapPin, Clock, Facebook, Instagram, Youtube, Send, CheckCircle } from 'lucide-react'
-import { Mail, Phone, MapPin, Clock, Facebook, Instagram, Youtube, Send, CheckCircle } from 'lucide-react'
 
 type InquiryType = 'general' | 'lessons' | 'events' | 'technical'
 

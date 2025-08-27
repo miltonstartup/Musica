@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useParams } from 'react-router-dom' // Keep this import
 import { Calendar, BookOpen, ArrowLeft } from 'lucide-react'
