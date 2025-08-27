@@ -20,7 +20,7 @@ export function BlogManagement() {
     slug: '',
     content: '',
     image_url: '',
-    published_at: new Date().toISOString().slice(0, 16)
+    published_date: new Date().toISOString().slice(0, 16)
   })
   const [submitting, setSubmitting] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
@@ -42,7 +42,7 @@ export function BlogManagement() {
       slug: post.slug,
       content: post.content,
       image_url: post.image_url || '',
-      published_at: new Date(post.published_at).toISOString().slice(0, 16)
+      published_date: new Date(post.published_date).toISOString().slice(0, 16)
     })
     setIsCreating(false)
     setFormError(null)
@@ -56,7 +56,7 @@ export function BlogManagement() {
       slug: '',
       content: '',
       image_url: '',
-      published_at: new Date().toISOString().slice(0, 16)
+      published_date: new Date().toISOString().slice(0, 16)
     })
     setIsCreating(true)
     setFormError(null)
@@ -71,7 +71,7 @@ export function BlogManagement() {
       slug: '',
       content: '',
       image_url: '',
-      published_at: new Date().toISOString().slice(0, 16)
+      published_date: new Date().toISOString().slice(0, 16)
     })
     setFormError(null)
     setPreviewMode(false)
@@ -93,7 +93,7 @@ export function BlogManagement() {
     try {
       const submitData = {
         ...formData,
-        published_at: new Date(formData.published_at).toISOString()
+        published_date: new Date(formData.published_date).toISOString()
       }
       
       if (editingPost) {
@@ -277,8 +277,8 @@ export function BlogManagement() {
                     </label>
                     <input
                       type="datetime-local"
-                      value={formData.published_at}
-                      onChange={(e) => setFormData({ ...formData, published_at: e.target.value })}
+                      value={formData.published_date}
+                      onChange={(e) => setFormData({ ...formData, published_date: e.target.value })}
                       className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
                       required
                     />
@@ -336,7 +336,7 @@ export function BlogManagement() {
                   />
                 )}
                 <div className="text-sm text-slate-500 mb-6">
-                  Published on {formatDate(formData.published_at)}
+                  Published on {formatDate(formData.published_date)}
                 </div>
                 <div>
                   {formatContent(formData.content)}
@@ -379,7 +379,7 @@ export function BlogManagement() {
                     <div className="flex items-center gap-4 text-sm text-slate-600 mb-3">
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-1" />
-                        <span>Published {formatDate(post.published_at)}</span>
+                        <span>Published {formatDate(post.published_date)}</span>
                       </div>
                       <div>
                         {Math.ceil(post.content.length / 1000)} min read
