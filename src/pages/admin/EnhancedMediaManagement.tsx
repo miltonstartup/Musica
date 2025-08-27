@@ -6,7 +6,7 @@ import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
 import { PasteButton } from '../../components/PasteButton'
 import { ImageUpload } from '../../components/ImageUpload'
-import { extractYouTubeId, isValidInstagramUrl, isValidYouTubeUrl } from '../../lib/utils'
+import { extractYouTubeId, isValidInstagramUrl, isValidYouTubeUrl, processEmbedCode, isYouTubeEmbed, extractYouTubeIdFromEmbed, isInstagramEmbed, extractInstagramIdFromEmbed, convertEmbedToUrl } from '../../lib/utils'
 import type { MediaItem } from '../../types'
 
 type MediaFormData = {
