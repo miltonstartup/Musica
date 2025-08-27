@@ -101,6 +101,7 @@ export function BlogCarousel() {
             </Button>
           </Link>
         </div>
-      </section>
+      </div>
+    </section>
   )
 }
