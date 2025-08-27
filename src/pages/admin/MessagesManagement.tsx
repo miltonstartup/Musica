@@ -6,7 +6,6 @@ import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
 import { formatDate } from '../../lib/utils'
 import { useContactMessages } from '../../hooks/useContactMessages'
-import { formatDate } from '../../lib/utils'
 import type { ContactMessage } from '../../types'
 
 type FilterStatus = 'all' | 'read' | 'unread'
