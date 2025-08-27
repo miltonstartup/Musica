@@ -144,8 +144,8 @@ export interface CreateContactMessageData {
   phone?: string
   message: string
   inquiry_type: string
-  is_read?: boolean
-  admin_response?: string | null
+  is_read: boolean
+  admin_response: string | null
 }
 
 // Type aliases for compatibility

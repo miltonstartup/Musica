@@ -51,7 +51,9 @@ export function ContactPage() {
         email: formData.email,
         phone: formData.phone || undefined,
         message: formData.message,
-        inquiry_type: formData.inquiry_type
+        inquiry_type: formData.inquiry_type,
+        is_read: false,
+        admin_response: null
       })
       setIsSubmitted(true)
       setFormData({
