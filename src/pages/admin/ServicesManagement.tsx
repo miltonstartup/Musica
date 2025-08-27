@@ -53,14 +53,14 @@ export function ServicesManagement() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this service?')) return
+    if (!confirm('¿Estás seguro de que quieres eliminar este servicio?')) return
     
     setDeleting(id)
     try {
       await servicesApi.delete(id)
       refreshServices()
     } catch (error) {
-      alert('Error deleting service: ' + (error instanceof Error ? error.message : 'Unknown error'))
+      alert('Error al eliminar el servicio: ' + (error instanceof Error ? error.message : 'Error desconocido'))
     } finally {
       setDeleting(null)
     }
@@ -104,7 +104,7 @@ export function ServicesManagement() {
         <Card>
           <CardHeader>
             <h3 className="text-lg font-semibold text-slate-800"> {/* Keep this heading */}
-              {editingService ? 'Edit Service' : 'Create New Service'}
+              {editingService ? 'Editar Servicio' : 'Crear Nuevo Servicio'}
             </h3>
           </CardHeader>
           <CardContent>
@@ -112,7 +112,7 @@ export function ServicesManagement() {
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2"> {/* Keep this label */}
-                    Service Name *
+                    Nombre del Servicio *
                   </label>
                   <input
                     type="text"
@@ -126,7 +126,7 @@ export function ServicesManagement() {
 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2"> {/* Keep this label */}
-                    Price ($) *
+                    Precio ($) *
                   </label>
                   <input
                     type="number"
@@ -144,7 +144,7 @@ export function ServicesManagement() {
               <div className="grid md:grid-cols-2 gap-4">
                 <div> {/* Keep this div */}
                   <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Duration (minutes) *
+                    Descripción
                   </label>
                   <input
                     type="number"
@@ -205,7 +205,7 @@ export function ServicesManagement() {
                   )}
                 </Button>
                 <Button type="button" variant="outline" onClick={handleCancel}>
-                  Cancel
+                  Cancelar
                 </Button>
               </div>
             </form>

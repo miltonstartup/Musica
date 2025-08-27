@@ -7,6 +7,7 @@ import { Spinner } from '../../components/Spinner'
 import { PasteButton } from '../../components/PasteButton'
 import { ImageUpload } from '../../components/ImageUpload'
 import { extractYouTubeId, isValidInstagramUrl, isValidYouTubeUrl } from '../../lib/utils'
+import type { MediaItem } from '../../types'
 
 type MediaFormData = {
   title: string

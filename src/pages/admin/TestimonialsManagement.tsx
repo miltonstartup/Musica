@@ -170,7 +170,7 @@ export function TestimonialsManagement() {
                   )}
                 </Button>
                 <Button type="button" variant="outline" onClick={handleCancel}>
-                  Cancel
+                  Cancelar
                 </Button>
               </div>
             </form>

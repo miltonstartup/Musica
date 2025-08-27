@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useContactMessages } from '../hooks'
+import { useContactMessages } from '../hooks/useContactMessages'
 import { Button } from '../components/Button' // Keep this import
 import { Mail, Phone, MapPin, Clock, Facebook, Instagram, Youtube, Send, CheckCircle } from 'lucide-react'
 

@@ -110,14 +110,14 @@ export function BlogManagement() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this blog post?')) return
+    if (!confirm('¿Estás seguro de que quieres eliminar esta publicación del blog?')) return
     
     setDeleting(id)
     try {
       await blogApi.delete(id)
       refreshBlogPosts()
     } catch (error) {
-      alert('Error deleting blog post: ' + (error instanceof Error ? error.message : 'Unknown error'))
+      alert('Error al eliminar la publicación: ' + (error instanceof Error ? error.message : 'Error desconocido'))
     } finally {
       setDeleting(null)
     }
@@ -200,7 +200,7 @@ export function BlogManagement() {
                   onClick={() => setPreviewMode(!previewMode)}
                 >
                   <Eye className="w-4 h-4 mr-1" />
-                  {previewMode ? 'Editar' : 'Vista Previa'}
+                  Cancelar
                 </Button>
               </div>
             </div>
@@ -266,7 +266,7 @@ export function BlogManagement() {
 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2"> {/* Keep this label */}
-                    Content *
+                    Contenido *
                   </label>
                   <textarea
                     value={formData.content}
@@ -274,13 +274,14 @@ export function BlogManagement() {
                     className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
                     rows={12}
                     placeholder="Write your blog post content here...
+Escribe el contenido de tu publicación aquí...
 Usa **texto** para encabezados y subtítulos.
 Separa los párrafos con dos saltos de línea."
                     required
                   />
                   {/* Keep this tip */}
                   <p className="text-sm text-slate-500 mt-2"> {/* Keep this paragraph */}
-                    Tip: Use **text** for headings and separate paragraphs with double line breaks.
+                    Consejo: Usa **texto** para encabezados y separa párrafos con dobles saltos de línea.
                   </p>
                 </div>
 
