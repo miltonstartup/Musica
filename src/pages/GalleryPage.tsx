@@ -237,19 +237,27 @@ function GalleryPage() {
                 </video>
               )}
               {currentMedia.media_type === 'instagram' && (
-                <div className="flex flex-col items-center justify-center h-full p-8">
-                  <Instagram className="w-24 h-24 text-pink-500 mb-4" />
-                  <p className="text-lg text-slate-700 mb-4 text-center">
-                    Para ver este contenido de Instagram, por favor visita la publicación original:
-                  </p>
-                  <a
-                    href={currentMedia.media_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline flex items-center"
-                  >
-                    Ver en Instagram <X className="w-4 h-4 ml-2" />
-                  </a>
+                <div className="w-full max-w-lg mx-auto">
+                  <div className="bg-gradient-to-br from-purple-50 to-pink-50 border border-pink-200 rounded-lg p-6">
+                    <div className="flex items-center justify-center mb-4">
+                      <Instagram className="w-12 h-12 text-pink-500" />
+                    </div>
+                    <h4 className="text-center font-semibold text-slate-800 mb-2">{currentMedia.title}</h4>
+                    {currentMedia.description && (
+                      <p className="text-center text-slate-600 text-sm mb-4">{currentMedia.description}</p>
+                    )}
+                    <div className="text-center">
+                      <a
+                        href={currentMedia.media_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors font-medium"
+                      >
+                        <Instagram className="w-5 h-5 mr-2" />
+                        Ver en Instagram
+                      </a>
+                    </div>
+                  </div>
                 </div>
               )}
               <div className="mt-4 text-center">
