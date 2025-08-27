@@ -266,7 +266,7 @@ export function BlogManagement() {
 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2"> {/* Keep this label */}
-                    URL Amigable (Slug) *
+                    Contenido *
                   </label>
                   <textarea
                     value={formData.content}
@@ -304,7 +304,7 @@ Separa los párrafos con dos saltos de línea."
                     )}
                   </Button>
                   <Button type="button" variant="outline" onClick={handleCancel}>
-                    Cancel
+                    Cancelar
                   </Button>
                 </div>
               </form>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { Image as ImageIcon, Video, Youtube, Instagram, Star, Filter, X } from 'lucide-react' // Keep these imports
 import { Card, CardContent, CardHeader } from '../components/Card'
 import { Button } from '../components/Button'
@@ -18,7 +17,7 @@ function GalleryPage() {
   const [filterType, setFilterType] = useState<MediaType>('all')
   const [filterCategory, setFilterCategory] = useState<CategoryType>('all')
   const [lightboxOpen, setLightboxOpen] = useState(false)
-  const [currentMedia, setCurrentMedia] = useState<any>(null)
+  const [currentMedia, setCurrentMedia] = useState<typeof mediaItems[0] | null>(null)
 
   const filteredMedia = mediaItems.filter(item => {
     const typeMatch = filterType === 'all' || item.media_type === filterType

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { MediaItem } from '../types';
+import type { MediaGallery as MediaItem } from '../types';
 import {
   getMediaItems,
   getMediaItemsByCategory,
