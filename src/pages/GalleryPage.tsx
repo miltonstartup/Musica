@@ -137,7 +137,7 @@ function GalleryPage() {
             filteredMedia.map((item) => {
               const IconComponent = getMediaIcon(item.media_type)
               return (
-                <div // Wrap Card to handle onClick directly
+                <Card
                   key={item.id}
                   className="cursor-pointer hover:shadow-xl transition-shadow group"
                   onClick={() => openLightbox(item)}
@@ -191,7 +191,7 @@ function GalleryPage() {
                     </div>
                   </CardContent>
                 </Card>
-                </div>
+              )
             })
           )}
         </div>
