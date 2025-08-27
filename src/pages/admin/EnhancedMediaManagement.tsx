@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader } from '../../components/Card'
 import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
 import { PasteButton } from '../../components/PasteButton'
+import { ImageUpload } from '../../components/ImageUpload'
 import { extractYouTubeId, isValidInstagramUrl, isValidYouTubeUrl } from '../../lib/utils'
 import { 
   Plus, 
@@ -346,25 +347,39 @@ export function EnhancedMediaManagement() {
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       {formData.media_type === 'youtube' && 'URL de YouTube *'}
                       {formData.media_type === 'instagram' && 'URL de Instagram *'}
-                      {(formData.media_type === 'photo' || formData.media_type === 'video') && 'URL del Archivo *'}
+                      {(formData.media_type === 'photo' || formData.media_type === 'video') && 'Imagen/Video *'}
                     </label>
-                    <div className="flex space-x-2">
-                      <input
-                        type="url"
-                        required
-                        value={formData.media_url}
-                        onChange={(e) => handleUrlChange(e.target.value)}
-                        className={`flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 ${
-                          urlError ? 'border-red-300' : 'border-slate-300'
-                        }`}
-                        placeholder={
-                          formData.media_type === 'youtube' ? 'https://www.youtube.com/watch?v=...' :
-                          formData.media_type === 'instagram' ? 'https://www.instagram.com/p/...' :
-                          'https://ejemplo.com/archivo.jpg'
-                        }
+                    
+                    {(formData.media_type === 'photo' || formData.media_type === 'video') ? (
+                      <ImageUpload
+                        currentImageUrl={formData.media_url}
+                        onImageUploaded={(url) => {
+                          setFormData({ ...formData, media_url: url })
+                          setUrlPreview(url)
+                          setUrlError(null)
+                        }}
+                        bucket="media-gallery"
+                        className="w-full"
                       />
-                      <PasteButton onPaste={handleUrlPaste} className="flex-shrink-0" />
-                    </div>
+                    ) : (
+                      <div className="flex space-x-2">
+                        <input
+                          type="url"
+                          required
+                          value={formData.media_url}
+                          onChange={(e) => handleUrlChange(e.target.value)}
+                          className={`flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 ${
+                            urlError ? 'border-red-300' : 'border-slate-300'
+                          }`}
+                          placeholder={
+                            formData.media_type === 'youtube' ? 'https://www.youtube.com/watch?v=...' :
+                            formData.media_type === 'instagram' ? 'https://www.instagram.com/p/...' :
+                            'https://ejemplo.com/archivo.jpg'
+                          }
+                        />
+                        <PasteButton onPaste={handleUrlPaste} className="flex-shrink-0" />
+                      </div>
+                    )}
                     
                     {urlError && (
                       <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-red-600 text-sm flex items-center">
@@ -442,21 +457,34 @@ export function EnhancedMediaManagement() {
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-2">
-                        Miniatura Personalizada (Opcional)
+                        {(formData.media_type === 'photo' || formData.media_type === 'video') ? 
+                          'Miniatura Personalizada (Opcional)' : 
+                          'Miniatura (Opcional)'
+                        }
                       </label>
-                      <div className="flex space-x-2">
-                        <input
-                          type="url"
-                          value={formData.thumbnail_url}
-                          onChange={(e) => setFormData({ ...formData, thumbnail_url: e.target.value })}
-                          className="flex-1 px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
-                          placeholder="https://ejemplo.com/miniatura.jpg"
+                      
+                      {(formData.media_type === 'photo' || formData.media_type === 'video') ? (
+                        <ImageUpload
+                          currentImageUrl={formData.thumbnail_url}
+                          onImageUploaded={(url) => setFormData({ ...formData, thumbnail_url: url })}
+                          bucket="media-gallery-thumbnails"
+                          className="w-full"
                         />
-                        <PasteButton 
-                          onPaste={(url) => setFormData({ ...formData, thumbnail_url: url })} 
-                          className="flex-shrink-0" 
-                        />
-                      </div>
+                      ) : (
+                        <div className="flex space-x-2">
+                          <input
+                            type="url"
+                            value={formData.thumbnail_url}
+                            onChange={(e) => setFormData({ ...formData, thumbnail_url: e.target.value })}
+                            className="flex-1 px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                            placeholder="https://ejemplo.com/miniatura.jpg"
+                          />
+                          <PasteButton 
+                            onPaste={(url) => setFormData({ ...formData, thumbnail_url: url })} 
+                            className="flex-shrink-0" 
+                          />
+                        </div>
+                      )}
                     </div>
 
                     <div>
@@ -518,14 +546,58 @@ export function EnhancedMediaManagement() {
                         <h3 className="text-lg font-semibold mb-4">{formData.title}</h3>
                         {formData.media_type === 'youtube' && (
                           <div className="relative bg-black rounded-lg overflow-hidden">
-                            <img 
-                              src={urlPreview} 
-                              alt={formData.title}
-                              className="w-full h-64 object-cover"
-                            />
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <Youtube className="w-16 h-16 text-red-500" />
+                            {(() => {
+                              const videoId = extractYouTubeId(formData.media_url)
+                              return videoId ? (
+                                <iframe
+                                  width="100%"
+                                  height="315"
+                                  src={`https://www.youtube.com/embed/${videoId}`}
+                                  title={formData.title}
+                                  frameBorder="0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                  className="w-full h-64"
+                                />
+                              ) : (
+                                <div className="w-full h-64 bg-gray-200 flex items-center justify-center">
+                                  <Youtube className="w-16 h-16 text-gray-400" />
+                                </div>
+                              )
+                            })()}
+                          </div>
+                        )}
+                        {formData.media_type === 'instagram' && (
+                          <div className="border rounded-lg p-4 bg-gradient-to-br from-purple-50 to-pink-50">
+                            <div className="flex items-center justify-center mb-4">
+                              <Instagram className="w-12 h-12 text-pink-500" />
                             </div>
+                            <p className="text-center text-slate-600 mb-4">Contenido de Instagram</p>
+                            <a 
+                              href={formData.media_url} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="block text-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors"
+                            >
+                              Ver en Instagram
+                            </a>
+                          </div>
+                        )}
+                        {(formData.media_type === 'photo' || formData.media_type === 'video') && (
+                          <div className="border rounded-lg overflow-hidden">
+                            {formData.media_type === 'photo' ? (
+                              <img 
+                                src={formData.media_url} 
+                                alt={formData.title}
+                                className="w-full h-64 object-cover"
+                              />
+                            ) : (
+                              <video 
+                                src={formData.media_url}
+                                controls
+                                className="w-full h-64 object-cover"
+                              />
+                            )}
                           </div>
                         )}
                         {formData.description && (

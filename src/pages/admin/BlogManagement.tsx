@@ -3,7 +3,6 @@ import { Plus, Edit2, Trash2, Eye, Calendar, AlertCircle, FileText } from 'lucid
 import { Card, CardContent, CardHeader } from '../../components/Card'
 import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
-import { PasteButton } from '../../components/PasteButton'
 import { ImageUpload } from '../../components/ImageUpload'
 import { useBlogPosts } from '../../hooks/useBlogPosts'
 import { blogApi } from '../../api/blog'
@@ -249,26 +248,6 @@ export function BlogManagement() {
                       onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
                       bucket="blog-images"
                     />
-                    
-                    {/* Alternative URL input for manual entry */}
-                    <div className="mt-3">
-                      <label className="block text-xs font-medium text-slate-600 mb-1">
-                        Or enter image URL manually:
-                      </label>
-                      <div className="flex space-x-2">
-                        <input
-                          type="url"
-                          value={formData.image_url}
-                          onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                          className="flex-1 px-2 py-1 text-sm border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-amber-500"
-                          placeholder="https://example.com/image.jpg"
-                        />
-                        <PasteButton 
-                          onPaste={(url) => setFormData({ ...formData, image_url: url })} 
-                          className="flex-shrink-0" 
-                        />
-                      </div>
-                    </div>
                   </div>
 
                   <div>

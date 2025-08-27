@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, Star, BookOpen, ArrowRight, Play } from 'lucide-react'
+import { Calendar, Star, BookOpen, ArrowRight, Play, Youtube, Instagram } from 'lucide-react'
 import { Button } from '../components/Button'
 import { Card, CardContent } from '../components/Card'
 import { useServices } from '../hooks/useServices'
 import { useTestimonials } from '../hooks/useTestimonials'
 import { useFeaturedMedia } from '../hooks/useMediaGallery'
-import { formatPrice } from '../lib/utils'
+import { formatPrice, extractYouTubeId } from '../lib/utils'
 import { BlogCarousel } from '../components/BlogCarousel'
 import { Spinner } from '../components/Spinner'
 
@@ -156,25 +156,32 @@ export function HomePage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {featuredVideos.map((video) => {
                 const isYoutube = video.media_type === 'youtube'
-                const videoId = isYoutube && video.media_url.includes('watch?v=') 
-                  ? video.media_url.split('watch?v=')[1].split('&')[0]
-                  : isYoutube && video.media_url.includes('youtu.be/')
-                    ? video.media_url.split('youtu.be/')[1]?.split('?')[0]
-                    : null
+                const videoId = isYoutube ? extractYouTubeId(video.media_url) : null
                 
                 return (
                   <div key={video.id} className="group">
                     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
                       <div className="relative">
                         {isYoutube && videoId ? (
-                          <div className="relative w-full h-48">
-                            <img 
-                              src={video.thumbnail_url || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
-                              alt={video.title}
-                              className="w-full h-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center group-hover:bg-opacity-50 transition-all duration-300">
-                              <Play className="w-12 h-12 text-white" />
+                          <iframe
+                            width="100%"
+                            height="192"
+                            src={`https://www.youtube.com/embed/${videoId}`}
+                            title={video.title}
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className="w-full h-48"
+                          />
+                        ) : isYoutube ? (
+                          <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                            <Youtube className="w-12 h-12 text-gray-400" />
+                          </div>
+                        ) : video.media_type === 'instagram' ? (
+                          <div className="w-full h-48 bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
+                            <div className="text-center">
+                              <Instagram className="w-12 h-12 text-pink-500 mb-2" />
+                              <p className="text-sm text-slate-600">Ver en Instagram</p>
                             </div>
                           </div>
                         ) : (
@@ -189,6 +196,19 @@ export function HomePage() {
                         <h3 className="font-semibold text-slate-800 mb-2">{video.title}</h3>
                         {video.description && (
                           <p className="text-slate-600 text-sm line-clamp-2">{video.description}</p>
+                        )}
+                        {video.media_type === 'instagram' && (
+                          <div className="mt-2">
+                            <a 
+                              href={video.media_url} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center text-sm text-pink-600 hover:text-pink-700"
+                            >
+                              <Instagram className="w-4 h-4 mr-1" />
+                              Ver en Instagram
+                            </a>
+                          </div>
                         )}
                       </CardContent>
                     </Card>

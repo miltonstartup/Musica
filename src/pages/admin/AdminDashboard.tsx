@@ -1,13 +1,81 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import { Navigate } from 'react-router-dom'
 import { BarChart3, Calendar, FileText, Star, Users, DollarSign, Image, MessageSquare } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../../components/Card'
 import { Button } from '../../components/Button'
 import { Link } from 'react-router-dom'
+import { servicesApi } from '../../api/services'
+import { appointmentsApi } from '../../api/appointments'
+import { testimonialsApi } from '../../api/testimonials'
+import { paymentsApi } from '../../api/payments'
+import { contactMessagesApi } from '../../api/contact-messages'
+import { Spinner } from '../../components/Spinner'
 
 export function AdminDashboard() {
   const { user, loading } = useAuth()
+  const [stats, setStats] = useState({
+    totalStudents: 0,
+    weeklyAppointments: 0,
+    monthlyRevenue: 0,
+    averageRating: 0,
+    unreadMessages: 0
+  })
+  const [statsLoading, setStatsLoading] = useState(true)
+
+  useEffect(() => {
+    if (user) {
+      loadStats()
+    }
+  }, [user])
+
+  const loadStats = async () => {
+    try {
+      setStatsLoading(true)
+      
+      // Get all data in parallel
+      const [appointments, payments, testimonials, messages] = await Promise.all([
+        appointmentsApi.getAll(),
+        paymentsApi.getAll(),
+        testimonialsApi.getAll(),
+        contactMessagesApi.getUnread()
+      ])
+
+      // Calculate stats
+      const now = new Date()
+      const weekStart = new Date(now.setDate(now.getDate() - now.getDay()))
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+
+      const weeklyAppointments = appointments.filter(apt => {
+        const aptDate = new Date(apt.appointment_date)
+        return aptDate >= weekStart
+      }).length
+
+      const monthlyRevenue = payments.filter(payment => {
+        const paymentDate = new Date(payment.payment_date)
+        return paymentDate >= monthStart && payment.status === 'completed'
+      }).reduce((sum, payment) => sum + payment.amount, 0)
+
+      const totalStudents = new Set(appointments.map(apt => apt.client_email)).size
+
+      const averageRating = testimonials.length > 0 
+        ? testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length 
+        : 0
+
+      setStats({
+        totalStudents,
+        weeklyAppointments,
+        monthlyRevenue,
+        averageRating: Math.round(averageRating * 10) / 10,
+        unreadMessages: messages.length
+      })
+    } catch (error) {
+      console.error('Error loading stats:', error)
+    } finally {
+      setStatsLoading(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -113,7 +181,9 @@ export function AdminDashboard() {
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-slate-600">Total Estudiantes</p>
-                  <p className="text-2xl font-bold text-slate-800">124</p>
+                  <p className="text-2xl font-bold text-slate-800">
+                    {statsLoading ? <Spinner size="sm" /> : stats.totalStudents}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -127,7 +197,9 @@ export function AdminDashboard() {
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-slate-600">Esta Semana</p>
-                  <p className="text-2xl font-bold text-slate-800">18</p>
+                  <p className="text-2xl font-bold text-slate-800">
+                    {statsLoading ? <Spinner size="sm" /> : stats.weeklyAppointments}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -141,7 +213,9 @@ export function AdminDashboard() {
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-slate-600">Ingresos Mensuales</p>
-                  <p className="text-2xl font-bold text-slate-800">$3,420</p>
+                  <p className="text-2xl font-bold text-slate-800">
+                    {statsLoading ? <Spinner size="sm" /> : `$${stats.monthlyRevenue.toFixed(0)}`}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -155,7 +229,9 @@ export function AdminDashboard() {
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-slate-600">Calificación Prom.</p>
-                  <p className="text-2xl font-bold text-slate-800">4.9</p>
+                  <p className="text-2xl font-bold text-slate-800">
+                    {statsLoading ? <Spinner size="sm" /> : stats.averageRating || 'N/A'}
+                  </p>
                 </div>
               </div>
             </CardContent>

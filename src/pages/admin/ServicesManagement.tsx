@@ -3,7 +3,7 @@ import { Plus, Edit2, Trash2, DollarSign, Clock, AlertCircle, CheckCircle } from
 import { Card, CardContent, CardHeader } from '../../components/Card'
 import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
-import { PasteButton } from '../../components/PasteButton'
+import { ImageUpload } from '../../components/ImageUpload'
 import { useAdminForm } from '../../hooks/useAdminForm'
 import { useServices } from '../../hooks/useServices'
 import { servicesApi } from '../../api/services'
@@ -160,24 +160,14 @@ export function ServicesManagement() {
 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Image URL
+                    Service Image
                   </label>
-                  <div className="flex space-x-2">
-                    <input
-                      type="url"
-                      value={formData.image_url}
-                      onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                      className="flex-1 px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      placeholder="/images/service-image.jpg"
-                    />
-                    <PasteButton 
-                      onPaste={(url) => setFormData({ ...formData, image_url: url })} 
-                      className="flex-shrink-0" 
-                    />
-                  </div>
-                  <p className="text-xs text-slate-500 mt-1">
-                    URL de la imagen para el servicio (opcional)
-                  </p>
+                  <ImageUpload
+                    currentImageUrl={formData.image_url}
+                    onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+                    bucket="service-images"
+                    className="w-full"
+                  />
                 </div>
               </div>
 

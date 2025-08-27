@@ -4,6 +4,7 @@ import { MediaItem } from '../types'
 import { Card } from '../components/Card'
 import { Button } from '../components/Button'
 import { Image, Video, Play, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { extractYouTubeId } from '../lib/utils'
 
 interface LightboxProps {
   item: MediaItem | null
@@ -38,11 +39,9 @@ function Lightbox({ item, onClose, onNext, onPrev }: LightboxProps) {
     }
     
     if (item.media_type === 'youtube') {
-      const videoId = item.media_url.includes('watch?v=') 
-        ? item.media_url.split('watch?v=')[1].split('&')[0]
-        : item.media_url.split('youtu.be/')[1]?.split('?')[0]
+      const videoId = extractYouTubeId(item.media_url)
       
-      return (
+      return videoId ? (
         <iframe
           width="800"
           height="450"
@@ -53,6 +52,32 @@ function Lightbox({ item, onClose, onNext, onPrev }: LightboxProps) {
           allowFullScreen
           className="max-h-[80vh]"
         />
+      ) : (
+        <div className="max-h-[80vh] max-w-full bg-gray-100 flex items-center justify-center p-8">
+          <div className="text-center">
+            <Youtube className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-600">Video de YouTube no válido</p>
+          </div>
+        </div>
+      )
+    }
+    
+    if (item.media_type === 'instagram') {
+      return (
+        <div className="max-h-[80vh] max-w-full bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center p-8">
+          <div className="text-center">
+            <Instagram className="w-16 h-16 text-pink-500 mx-auto mb-4" />
+            <p className="text-slate-700 mb-4">Contenido de Instagram</p>
+            <a 
+              href={item.media_url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors"
+            >
+              Ver en Instagram
+            </a>
+          </div>
+        </div>
       )
     }
     
@@ -177,13 +202,33 @@ export function GalleryPage() {
     if (item.media_type === 'youtube') {
       return (
         <div className="relative w-full h-64 bg-gray-100 flex items-center justify-center">
-          <img
-            src={item.thumbnail_url || `https://img.youtube.com/vi/${item.media_url.split('v=')[1]?.split('&')[0]}/maxresdefault.jpg`}
-            alt={item.title}
-            className="w-full h-full object-cover"
-          />
+          {(() => {
+            const videoId = extractYouTubeId(item.media_url)
+            return videoId ? (
+              <img
+                src={item.thumbnail_url || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+                alt={item.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                <Youtube className="w-12 h-12 text-gray-400" />
+              </div>
+            )
+          })()}
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
             <Play className="w-12 h-12 text-red-500" />
+          </div>
+        </div>
+      )
+    }
+    
+    if (item.media_type === 'instagram') {
+      return (
+        <div className="w-full h-64 bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
+          <div className="text-center">
+            <Instagram className="w-12 h-12 text-pink-500 mb-2" />
+            <p className="text-sm text-slate-600">Instagram</p>
           </div>
         </div>
       )
