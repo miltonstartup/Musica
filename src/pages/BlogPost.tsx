@@ -10,7 +10,9 @@ import { formatDate } from '../lib/utils'
 import { blogApi } from '../api/blog'
 import type { BlogPost as BlogPostType } from '../types'
 
-export function BlogPost() {
+export { BlogPost }
+
+function BlogPost() {
   const { slug } = useParams<{ slug: string }>()
   const [post, setPost] = useState<BlogPostType | null>(null)
   const [loading, setLoading] = useState(true)

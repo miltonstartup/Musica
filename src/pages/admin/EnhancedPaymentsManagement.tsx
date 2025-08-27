@@ -12,7 +12,9 @@ import type { Payment, Appointment } from '../../types'
 
 type FilterStatus = 'all' | 'pending' | 'completed' | 'failed' | 'cancelled'
 
-export function EnhancedPaymentsManagement() {
+export { EnhancedPaymentsManagement }
+
+function EnhancedPaymentsManagement() {
   const [payments, setPayments] = useState<Payment[]>([])
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [loading, setLoading] = useState(true)

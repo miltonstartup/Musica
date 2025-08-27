@@ -7,7 +7,9 @@ import { Spinner } from '../components/Spinner'
 import { formatDate } from '../lib/utils'
 import { useAuth } from '../contexts/AuthContext'
 
-export function LoginPage() {
+export { LoginPage }
+
+function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)

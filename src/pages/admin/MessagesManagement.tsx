@@ -11,7 +11,9 @@ import type { ContactMessage } from '../../types'
 
 type FilterStatus = 'all' | 'read' | 'unread'
 
-export function MessagesManagement() {
+export { MessagesManagement }
+
+function MessagesManagement() {
   const { messages, loading, error, fetchMessages, markAsRead, addResponse, removeMessage } = useContactMessages()
   const [filter, setFilter] = useState<FilterStatus>('unread')
   const [respondingTo, setRespondingTo] = useState<ContactMessage | null>(null)

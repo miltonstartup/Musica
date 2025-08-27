@@ -8,7 +8,9 @@ import { useIsMobile } from '../hooks/use-mobile'
 import { Spinner } from '../components/Spinner'
 import { formatDate } from '../lib/utils'
 
-export function Header() {
+export { Header }
+
+function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const { user, signOut } = useAuth()
   const isMobile = useIsMobile()

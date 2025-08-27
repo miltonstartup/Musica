@@ -22,7 +22,9 @@ import { useContactMessages, useUnreadMessages } from '../../hooks/useContactMes
 import { appointmentsApi } from '../../api/appointments'
 import { paymentsApi } from '../../api/payments'
 
-export function AdminDashboard() {
+export { AdminDashboard }
+
+function AdminDashboard() {
   const { services, loading: servicesLoading, error: servicesError } = useServices()
   const { testimonials, loading: testimonialsLoading, error: testimonialsError } = useTestimonials()
   const { blogPosts, loading: blogLoading, error: blogError } = useBlogPosts()

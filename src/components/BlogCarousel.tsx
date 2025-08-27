@@ -7,7 +7,9 @@ import { useBlogPosts } from '../hooks/useBlogPosts'
 import { Spinner } from '../components/Spinner'
 import { formatDate } from '../lib/utils'
 
-export function BlogCarousel() {
+export { BlogCarousel }
+
+function BlogCarousel() {
   const { blogPosts, loading, error } = useBlogPosts()
 
   const getExcerpt = (content: string, maxLength: number = 150) => {

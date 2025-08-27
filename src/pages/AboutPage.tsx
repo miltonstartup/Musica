@@ -7,7 +7,9 @@ import { Spinner } from '../components/Spinner'
 import { formatDate } from '../lib/utils'
 import { Link } from 'react-router-dom'
 
-export function AboutPage() {
+export { AboutPage }
+
+function AboutPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}

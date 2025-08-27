@@ -8,10 +8,12 @@ import { formatDate } from '../lib/utils'
 import { useMediaGallery } from '../hooks/useMediaGallery'
 import { extractYouTubeId } from '../lib/utils'
 
+export { GalleryPage }
+
 type MediaType = 'all' | 'photo' | 'video' | 'youtube' | 'instagram'
 type CategoryType = 'all' | 'lecciones' | 'performances' | 'testimonios' | 'eventos' | 'general'
 
-export function GalleryPage() {
+function GalleryPage() {
   const { mediaItems, loading, error, fetchMediaItems, fetchMediaByCategory } = useMediaGallery()
   const [filterType, setFilterType] = useState<MediaType>('all')
   const [filterCategory, setFilterCategory] = useState<CategoryType>('all')
