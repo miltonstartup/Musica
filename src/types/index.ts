@@ -142,13 +142,11 @@ export interface CreateMediaGalleryData {
 export interface CreateContactMessageData {
   name: string
   email: string
-  phone?: string | null // Allow phone to be optional and nullable
+  phone?: string
   message: string
   inquiry_type: string
-  is_read: boolean // Make is_read required for creation
-  admin_response: string | null // Make admin_response required for creation, and nullable
-  is_read: boolean
-  admin_response: string | null
+  is_read?: boolean
+  admin_response?: string | null
 }
 
 // Type aliases for compatibility

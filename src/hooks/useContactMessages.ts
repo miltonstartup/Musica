@@ -54,7 +54,11 @@ export const useContactMessages = () => {
 
   const createMessage = async (messageData: CreateContactMessageData) => {
     try {
-      const newMessage = await contactMessagesApi.create(messageData)
+      const newMessage = await contactMessagesApi.create({
+        ...messageData,
+        is_read: false,
+        admin_response: null
+      })
       setMessages(prev => [newMessage, ...prev])
       return newMessage
     } catch (err) {

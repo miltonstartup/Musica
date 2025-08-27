@@ -49,11 +49,9 @@ export function ContactPage() {
       await createMessage({
         name: formData.name,
         email: formData.email,
-        phone: formData.phone || undefined,
+        phone: formData.phone || null,
         message: formData.message,
         inquiry_type: formData.inquiry_type,
-        is_read: false,
-        admin_response: null
       })
       setIsSubmitted(true)
       setFormData({

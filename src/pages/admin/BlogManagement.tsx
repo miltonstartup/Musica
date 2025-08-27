@@ -38,7 +38,7 @@ export function BlogManagement() {
     setEditingPost(post)
     setFormData({
       title: post.title,
-      slug: post.slug || '', // Ensure slug is always a string
+      slug: post.slug || generateSlug(post.title),
       content: post.content,
       image_url: post.image_url || '',
       published_date: new Date(post.published_date).toISOString().slice(0, 16)
