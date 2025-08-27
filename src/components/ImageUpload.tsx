@@ -136,7 +136,7 @@ export function ImageUpload({
               onClick={(e) => {
                 e.stopPropagation();
                 handleRemoveImage();
-              }}
+              Seleccionar Imagen
             >
               <X className="w-4 h-4" />
             </Button>
@@ -162,10 +162,10 @@ export function ImageUpload({
                   <Upload className="w-8 h-8 text-slate-400" />
                   <div className="space-y-1">
                     <p className="text-sm font-medium text-slate-600">
-                      Drop an image here, or click to browse
+                      Arrastra una imagen aquí, o haz clic para explorar
                     </p>
                     <p className="text-xs text-slate-400">
-                      PNG, JPG, JPEG up to 10MB
+                      PNG, JPG, JPEG hasta 10MB
                     </p>
                   </div>
                 </div>
@@ -222,7 +222,7 @@ export function ImageUpload({
                   onClick={handleUrlSubmit}
                   disabled={!urlInput.trim()}
                 >
-                  Usar URL
+                  Usar esta URL
                 </Button>
                 <Button
                   type="button"

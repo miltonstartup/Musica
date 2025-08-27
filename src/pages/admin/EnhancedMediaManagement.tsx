@@ -619,7 +619,7 @@ export function EnhancedMediaManagement() {
                   
                   <div className="flex gap-4">
                     <Button onClick={() => setActiveTab('form')} variant="outline" className="flex-1">
-                      Volver al Formulario {/* Translate this */}
+                      Volver al Formulario
                     </Button>
                     {formData.media_url && (
                       <Button 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ContactMessage, CreateContactMessageData } from '../types'
+import type { ContactMessage, CreateContactMessageData } from '../types'
 import { contactMessagesApi } from '../api/contact-messages'
 
 export const useContactMessages = () => {

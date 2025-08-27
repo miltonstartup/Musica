@@ -48,14 +48,14 @@ export function TestimonialsManagement() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this testimonial?')) return
+    if (!confirm('¿Estás seguro de que quieres eliminar este testimonio?')) return
     
     setDeleting(id)
     try {
       await testimonialsApi.delete(id)
       refreshTestimonials()
     } catch (error) {
-      alert('Error deleting testimonial: ' + (error instanceof Error ? error.message : 'Unknown error'))
+      alert('Error al eliminar el testimonio: ' + (error instanceof Error ? error.message : 'Error desconocido'))
     } finally {
       setDeleting(null)
     }
@@ -73,9 +73,9 @@ export function TestimonialsManagement() {
     return (
       <div className="text-center py-8">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-slate-800 mb-2">Error Loading Testimonials</h3>
+        <h3 className="text-lg font-semibold text-slate-800 mb-2">Error al cargar testimonios</h3>
         <p className="text-slate-600 mb-4">{error}</p>
-        <Button onClick={refreshTestimonials}>Try Again</Button>
+        <Button onClick={refreshTestimonials}>Intentar de nuevo</Button>
       </div>
     )
   }
@@ -99,7 +99,7 @@ export function TestimonialsManagement() {
         <Card>
           <CardHeader>
             <h3 className="text-lg font-semibold text-slate-800"> {/* Keep this heading */}
-              {editingTestimonial ? 'Edit Testimonial' : 'Create New Testimonial'}
+              {editingTestimonial ? 'Editar Testimonio' : 'Crear Nuevo Testimonio'}
             </h3>
           </CardHeader>
           <CardContent>
@@ -107,7 +107,7 @@ export function TestimonialsManagement() {
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2"> {/* Keep this label */}
-                    Author Name *
+                    Nombre del Autor *
                   </label>
                   <input
                     type="text"
@@ -121,7 +121,7 @@ export function TestimonialsManagement() {
 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2"> {/* Keep this label */}
-                    Rating
+                    Calificación
                   </label>
                   <select
                     value={formData.rating}
@@ -139,7 +139,7 @@ export function TestimonialsManagement() {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2"> {/* Keep this label */}
-                  Testimonial Content *
+                  Contenido del Testimonio *
                 </label>
                 <textarea
                   value={formData.content}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Plus, Edit2, Trash2, Eye, AlertCircle, FileText } from 'lucide-react'
+import { Plus, Edit2, Trash2, Eye, AlertCircle, FileText, Calendar } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../../components/Card' // Keep this import
 import { Button } from '../../components/Button'
 import { Spinner } from '../../components/Spinner'
@@ -163,9 +163,9 @@ export function BlogManagement() {
     return (
       <div className="text-center py-8">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-slate-800 mb-2">Error Loading Blog Posts</h3>
+        <h3 className="text-lg font-semibold text-slate-800 mb-2">Error al cargar las publicaciones</h3>
         <p className="text-slate-600 mb-4">{error}</p>
-        <Button onClick={refreshBlogPosts}>Try Again</Button>
+        <Button onClick={refreshBlogPosts}>Intentar de nuevo</Button>
       </div>
     )
   }
@@ -266,7 +266,7 @@ export function BlogManagement() {
 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2"> {/* Keep this label */}
-                    Contenido *
+                    URL Amigable (Slug) *
                   </label>
                   <textarea
                     value={formData.content}

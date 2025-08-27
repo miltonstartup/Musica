@@ -78,9 +78,9 @@ export function ServicesManagement() {
     return (
       <div className="text-center py-8">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-slate-800 mb-2">Error al cargar servicios</h3>
+        <h3 className="text-lg font-semibold text-slate-800 mb-2">Error al cargar los servicios</h3>
         <p className="text-slate-600 mb-4">{error}</p>
-        <Button onClick={refreshServices}>Try Again</Button>
+        <Button onClick={refreshServices}>Intentar de nuevo</Button>
       </div>
     )
   }
@@ -144,7 +144,7 @@ export function ServicesManagement() {
               <div className="grid md:grid-cols-2 gap-4">
                 <div> {/* Keep this div */}
                   <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Descripción
+                    Duración (minutos) *
                   </label>
                   <input
                     type="number"
@@ -175,7 +175,7 @@ export function ServicesManagement() {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2"> {/* Keep this label */}
-                  Description
+                  Descripción
                 </label>
                 <textarea
                   value={formData.description}
