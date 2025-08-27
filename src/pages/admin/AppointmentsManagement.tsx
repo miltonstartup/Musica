@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react'
+import { Search, Calendar, ArrowRight, BookOpen } from 'lucide-react' // Keep these imports
 import { Card, CardContent, CardHeader } from '../components/Card'
 import { Button } from '../components/Button'
+import { Card, CardContent, CardHeader } from '../../components/Card'
+import { Button } from '../../components/Button'
 import { useBlogPosts } from '../hooks/useBlogPosts'
-import { Spinner } from '../components/Spinner'
-import { formatDate } from '../lib/utils'
+import { Spinner } from '../../components/Spinner'
+import { formatDate } from '../../lib/utils'
 import type { BlogPost } from '../types'
 
 export function BlogPage() {
@@ -59,7 +61,7 @@ export function BlogPage() {
       <section className="py-16 bg-gradient-to-br from-slate-50 to-amber-50 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <BookOpen className="w-16 h-16 text-amber-600 mx-auto mb-6" />
-          <h1 className="text-4xl font-bold text-slate-800 mb-6">
+          <h1 className="text-4xl font-bold text-slate-800 mb-6"> {/* Keep this heading */}
             Blog de Educación Musical
           </h1>
           <p className="text-xl text-slate-600 mb-8">
@@ -68,7 +70,7 @@ export function BlogPage() {
           </p>
           
           {/* Search Bar */}
-          <div className="max-w-md mx-auto relative">
+          <div className="max-w-md mx-auto relative"> {/* Keep this div */}
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
             <input
               type="text"
@@ -87,7 +89,7 @@ export function BlogPage() {
           {filteredPosts.length === 0 ? (
             <div className="text-center py-12">
               <h3 className="text-xl font-semibold text-slate-800 mb-2">
-                {searchTerm ? 'No se encontraron artículos' : 'No hay publicaciones de blog disponibles'}
+                {searchTerm ? 'No se encontraron artículos' : 'No hay publicaciones de blog disponibles'} {/* Translate this */}
               </h3>
               <p className="text-slate-600">
                 {searchTerm 
@@ -100,7 +102,7 @@ export function BlogPage() {
             <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
               {filteredPosts.map((post) => (
                 <Card key={post.id} className="hover:shadow-xl transition-shadow">
-                  <div className="h-48 overflow-hidden">
+                  <div className="h-48 overflow-hidden"> {/* Keep this div */}
                     <img 
                       src={post.image_url || '/images/placeholders/elegant_music_education_blog_placeholder.jpg'} 
                       alt={post.title}
@@ -109,11 +111,11 @@ export function BlogPage() {
                   </div>
                   
                   <CardHeader>
-                    <div className="flex items-center text-sm text-slate-500 mb-2">
+                    <div className="flex items-center text-sm text-slate-500 mb-2"> {/* Keep this div */}
                       <Calendar className="w-4 h-4 mr-1" />
                       {formatDate(post.published_date)}
                     </div>
-                    <h2 className="text-xl font-bold text-slate-800 line-clamp-2">
+                    <h2 className="text-xl font-bold text-slate-800 line-clamp-2"> {/* Keep this heading */}
                       {post.title}
                     </h2>
                   </CardHeader>
