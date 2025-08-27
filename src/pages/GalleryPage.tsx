@@ -191,6 +191,7 @@ function GalleryPage() {
                     </div>
                   </CardContent>
                 </Card>
+              )
             })
           )}
         </div>
