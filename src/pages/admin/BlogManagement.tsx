@@ -1,0 +1,440 @@
+import React, { useState, useEffect } from 'react'
+import { Plus, Edit2, Trash2, Eye, Calendar, AlertCircle, FileText } from 'lucide-react'
+import { Card, CardContent, CardHeader } from '../../components/Card'
+import { Button } from '../../components/Button'
+import { Spinner } from '../../components/Spinner'
+import { PasteButton } from '../../components/PasteButton'
+import { ImageUpload } from '../../components/ImageUpload'
+import { useBlogPosts } from '../../hooks/useBlogPosts'
+import { blogApi } from '../../api/blog'
+import { formatDate } from '../../lib/utils'
+import type { BlogPost, CreateBlogPostData } from '../../types'
+
+export function BlogManagement() {
+  const { blogPosts, loading, error, refreshBlogPosts } = useBlogPosts()
+  const [editingPost, setEditingPost] = useState<BlogPost | null>(null)
+  const [isCreating, setIsCreating] = useState(false)
+  const [deleting, setDeleting] = useState<string | null>(null)
+  const [formData, setFormData] = useState<CreateBlogPostData>({
+    title: '',
+    slug: '',
+    content: '',
+    image_url: '',
+    published_date: new Date().toISOString().slice(0, 16)
+  })
+  const [submitting, setSubmitting] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
+  const [previewMode, setPreviewMode] = useState(false)
+
+  const generateSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim()
+  }
+
+  const handleEdit = (post: BlogPost) => {
+    setEditingPost(post)
+    setFormData({
+      title: post.title,
+      slug: post.slug,
+      content: post.content,
+      image_url: post.image_url || '',
+      published_date: new Date(post.published_date).toISOString().slice(0, 16)
+    })
+    setIsCreating(false)
+    setFormError(null)
+    setPreviewMode(false)
+  }
+
+  const handleCreate = () => {
+    setEditingPost(null)
+    setFormData({
+      title: '',
+      slug: '',
+      content: '',
+      image_url: '',
+      published_date: new Date().toISOString().slice(0, 16)
+    })
+    setIsCreating(true)
+    setFormError(null)
+    setPreviewMode(false)
+  }
+
+  const handleCancel = () => {
+    setEditingPost(null)
+    setIsCreating(false)
+    setFormData({
+      title: '',
+      slug: '',
+      content: '',
+      image_url: '',
+      published_date: new Date().toISOString().slice(0, 16)
+    })
+    setFormError(null)
+    setPreviewMode(false)
+  }
+
+  const handleTitleChange = (title: string) => {
+    setFormData({
+      ...formData,
+      title,
+      slug: !editingPost ? generateSlug(title) : formData.slug
+    })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSubmitting(true)
+    setFormError(null)
+
+    try {
+      const submitData = {
+        ...formData,
+        published_date: new Date(formData.published_date).toISOString()
+      }
+      
+      if (editingPost) {
+        await blogApi.update(editingPost.id, submitData)
+      } else {
+        await blogApi.create(submitData)
+      }
+      refreshBlogPosts()
+      handleCancel()
+    } catch (error) {
+      setFormError(error instanceof Error ? error.message : 'An error occurred')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this blog post?')) return
+    
+    setDeleting(id)
+    try {
+      await blogApi.delete(id)
+      refreshBlogPosts()
+    } catch (error) {
+      alert('Error deleting blog post: ' + (error instanceof Error ? error.message : 'Unknown error'))
+    } finally {
+      setDeleting(null)
+    }
+  }
+
+  const formatContent = (content: string) => {
+    return content.split('\n\n').map((paragraph, index) => {
+      if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
+        return (
+          <h3 key={index} className="text-lg font-semibold text-slate-800 mb-2 mt-4">
+            {paragraph.replace(/\*\*/g, '')}
+          </h3>
+        )
+      }
+      return (
+        <p key={index} className="text-slate-600 mb-3 leading-relaxed">
+          {paragraph.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').split('<strong>').map((part, i) => {
+            if (part.includes('</strong>')) {
+              const [bold, rest] = part.split('</strong>')
+              return (
+                <span key={i}>
+                  <strong>{bold}</strong>
+                  {rest}
+                </span>
+              )
+            }
+            return <span key={i}>{part}</span>
+          })}
+        </p>
+      )
+    })
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-8">
+        <Spinner size="lg" />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-8">
+        <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-slate-800 mb-2">Error Loading Blog Posts</h3>
+        <p className="text-slate-600 mb-4">{error}</p>
+        <Button onClick={refreshBlogPosts}>Try Again</Button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-800">Blog Management</h2>
+          <p className="text-slate-600 mt-1">Create and manage blog posts</p>
+        </div>
+        <Button onClick={handleCreate}>
+          <Plus className="w-4 h-4 mr-2" />
+          New Blog Post
+        </Button>
+      </div>
+
+      {/* Create/Edit Form */}
+      {(isCreating || editingPost) && (
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-slate-800">
+                {editingPost ? 'Edit Blog Post' : 'Create New Blog Post'}
+              </h3>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant={previewMode ? 'primary' : 'outline'}
+                  size="sm"
+                  onClick={() => setPreviewMode(!previewMode)}
+                >
+                  <Eye className="w-4 h-4 mr-1" />
+                  {previewMode ? 'Edit' : 'Preview'}
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {!previewMode ? (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Title *
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.title}
+                      onChange={(e) => handleTitleChange(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      placeholder="Enter blog post title"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Slug *
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.slug}
+                      onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      placeholder="url-friendly-slug"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Featured Image
+                    </label>
+                    <ImageUpload
+                      currentImageUrl={formData.image_url}
+                      onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+                      bucket="blog-images"
+                    />
+                    
+                    {/* Alternative URL input for manual entry */}
+                    <div className="mt-3">
+                      <label className="block text-xs font-medium text-slate-600 mb-1">
+                        Or enter image URL manually:
+                      </label>
+                      <div className="flex space-x-2">
+                        <input
+                          type="url"
+                          value={formData.image_url}
+                          onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                          className="flex-1 px-2 py-1 text-sm border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-amber-500"
+                          placeholder="https://example.com/image.jpg"
+                        />
+                        <PasteButton 
+                          onPaste={(url) => setFormData({ ...formData, image_url: url })} 
+                          className="flex-shrink-0" 
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Publish Date *
+                    </label>
+                    <input
+                      type="datetime-local"
+                      value={formData.published_date}
+                      onChange={(e) => setFormData({ ...formData, published_date: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Content *
+                  </label>
+                  <textarea
+                    value={formData.content}
+                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    rows={15}
+                    placeholder="Write your blog post content here...&#10;&#10;Use **text** for headings and subheadings.&#10;Separate paragraphs with double line breaks."
+                    required
+                  />
+                  <p className="text-sm text-slate-500 mt-2">
+                    Tip: Use **text** for headings and separate paragraphs with double line breaks.
+                  </p>
+                </div>
+
+                {formError && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-md flex items-center">
+                    <AlertCircle className="w-5 h-5 text-red-600 mr-2" />
+                    <p className="text-red-700 text-sm">{formError}</p>
+                  </div>
+                )}
+
+                <div className="flex gap-3">
+                  <Button type="submit" disabled={submitting}>
+                    {submitting ? (
+                      <>
+                        <Spinner size="sm" className="mr-2" />
+                        {editingPost ? 'Updating...' : 'Creating...'}
+                      </>
+                    ) : (
+                      editingPost ? 'Update Post' : 'Create Post'
+                    )}
+                  </Button>
+                  <Button type="button" variant="outline" onClick={handleCancel}>
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            ) : (
+              <div className="prose prose-lg max-w-none">
+                <h1 className="text-2xl font-bold text-slate-800 mb-4">{formData.title}</h1>
+                {formData.image_url && (
+                  <img 
+                    src={formData.image_url} 
+                    alt={formData.title}
+                    className="w-full h-64 object-cover rounded-lg mb-6"
+                  />
+                )}
+                <div className="text-sm text-slate-500 mb-6">
+                  Published on {formatDate(formData.published_date)}
+                </div>
+                <div>
+                  {formatContent(formData.content)}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Blog Posts List */}
+      <div className="grid gap-4">
+        {blogPosts.length === 0 ? (
+          <Card>
+            <CardContent className="p-8 text-center">
+              <FileText className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-slate-800 mb-2">No Blog Posts Found</h3>
+              <p className="text-slate-600 mb-4">Create your first blog post to share insights with your students.</p>
+              <Button onClick={handleCreate}>
+                <Plus className="w-4 h-4 mr-2" />
+                Create First Post
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          blogPosts.map((post) => (
+            <Card key={post.id}>
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <h3 className="text-xl font-semibold text-slate-800 line-clamp-1">
+                        {post.title}
+                      </h3>
+                      <span className="text-sm text-slate-500 bg-slate-100 px-2 py-1 rounded">
+                        /{post.slug}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center gap-4 text-sm text-slate-600 mb-3">
+                      <div className="flex items-center">
+                        <Calendar className="w-4 h-4 mr-1" />
+                        <span>Published {formatDate(post.published_date)}</span>
+                      </div>
+                      <div>
+                        {Math.ceil(post.content.length / 1000)} min read
+                      </div>
+                    </div>
+                    
+                    <p className="text-slate-600 line-clamp-2 mb-3">
+                      {post.content.substring(0, 200).replace(/\*\*/g, '')}...
+                    </p>
+                    
+                    {post.image_url && (
+                      <div className="text-sm text-slate-500">
+                        <span>Featured image: {post.image_url}</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="flex gap-2 ml-4">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => window.open(`/blog/${post.slug}`, '_blank')}
+                      title="View Post"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEdit(post)}
+                      title="Edit Post"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDelete(post.id)}
+                      disabled={deleting === post.id}
+                      className="text-red-600 border-red-600 hover:bg-red-50"
+                      title="Delete Post"
+                    >
+                      {deleting === post.id ? (
+                        <Spinner size="sm" />
+                      ) : (
+                        <Trash2 className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,444 @@
+[
+  {
+    "query": "Close-up photo of piano keys with elegant lighting for background elements",
+    "image_info": {
+      "url": "https://images.stockcake.com/public/a/7/7/a7768ae5-39fd-411a-9459-986763c83387_large/elegant-piano-close-up-stockcake.jpg",
+      "file_path": "/workspace/imgs/elegant-grand-piano-keys-close-up-dramatic-lighting.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 34929,
+      "width": 408,
+      "height": 728,
+      "total_pixels": 297024,
+      "basic_score": 0.7864297355409098
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 98.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 97.0,
+      "explanation": "The image perfectly matches the search query and prompt. It's a clear, sharp close-up of piano keys with beautifully elegant and dramatic lighting that enhances the background elements. The composition is professional and visually appealing, with no watermarks.",
+      "file_name": "elegant-grand-piano-keys-close-up-dramatic-lighting.jpg",
+      "caption": "A stunning close-up shot of the white and black keys of a grand piano, bathed in dramatic and elegant warm lighting. The shallow depth of field artfully blurs the polished dark body of the piano and subtle background elements, drawing focus to the intricate details and reflections on the keys. The composition highlights the sophisticated artistry of the instrument.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Close-up photo of piano keys with elegant lighting for background elements",
+    "image_info": {
+      "url": "https://images.pexels.com/photos/10855784/pexels-photo-10855784.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "file_path": "/workspace/imgs/elegant_close_up_piano_keys.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 33428,
+      "width": 1125,
+      "height": 750,
+      "total_pixels": 843750,
+      "basic_score": 0.9174248962151835
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 85.0,
+      "watermark_score": 100.0,
+      "overall_score": 90.0,
+      "explanation": "The image perfectly matches the search query and prompt, featuring a close-up of piano keys with elegant, soft lighting that enhances the overall aesthetic. The shallow depth of field effectively isolates the keys, contributing to the sophisticated feel. The clarity is excellent in the focal area.",
+      "file_name": "elegant_close_up_piano_keys.jpg",
+      "caption": "A close-up, low-angle photograph of ivory and ebony piano keys, softly illuminated by warm, ambient light that creates a rich, atmospheric depth of field. The image highlights the texture and arrangement of the keys, conveying a sense of musical elegance and calm.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Close-up photo of piano keys with elegant lighting for background elements",
+    "image_info": {
+      "url": "https://images.stockcake.com/public/f/6/b/f6bc6e24-ce53-43ce-b5d2-e425449bcb61_large/elegant-piano-keys-stockcake.jpg",
+      "file_path": "/workspace/imgs/elegant_piano_keys_close_up_warm_light.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 26438,
+      "width": 384,
+      "height": 672,
+      "total_pixels": 258048,
+      "basic_score": 0.7726914790189781
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 98.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 95.0,
+      "explanation": "The image is an excellent match for both the search query and prompt. It provides a clear, sharp close-up of piano keys with elegant composition and exceptional warm lighting that beautifully illuminates the background elements, fulfilling all requirements. There are no watermarks.",
+      "file_name": "elegant_piano_keys_close_up_warm_light.jpg",
+      "caption": "A captivating close-up view of shiny black and white piano keys, captured with a shallow depth of field that brings the foreground keys into sharp focus. A warm, golden light source reflects elegantly off the inner workings of the piano in the background, creating a soft glow and adding a sophisticated, artistic ambiance to the musical instrument.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Professional photo of guitar music instruction for services section",
+    "image_info": {
+      "url": "https://cdn.musichouseschool.com/TeacherandYoungGirlGuitarLessons.jpg",
+      "file_path": "/workspace/imgs/professional-guitar-music-lesson-teacher-student.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 65632,
+      "width": 1000,
+      "height": 667,
+      "total_pixels": 667000,
+      "basic_score": 0.8932728288587356
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 100.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 95.0,
+      "explanation": "This image is highly relevant, directly depicting guitar music instruction. It is a professional, high-quality photograph with excellent clarity, lighting, and composition. There are no watermarks, making it ideal for commercial use in a services section.",
+      "file_name": "professional-guitar-music-lesson-teacher-student.jpg",
+      "caption": "A professional photo of a female guitar teacher smiling at and guiding a young blonde girl who is learning to play an acoustic guitar. Both are seated in a brightly lit, modern room, with a music stand visible nearby, conveying a positive and engaging music instruction environment.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Professional photo of guitar music instruction for services section",
+    "image_info": {
+      "url": "https://sscmusic.org/wp-content/uploads/2017/05/teaching1-600x380.jpg",
+      "file_path": "/workspace/imgs/guitar_music_lesson_teacher_student.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 73954,
+      "width": 600,
+      "height": 380,
+      "total_pixels": 228000,
+      "basic_score": 0.7634918824613718
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 98.0,
+      "clarity_score": 85.0,
+      "watermark_score": 100.0,
+      "overall_score": 90.0,
+      "explanation": "The image is highly relevant, perfectly depicting a guitar music lesson with an instructor teaching a student. It is clear, well-composed, and professional, making it suitable for a services section. There are no watermarks.",
+      "file_name": "guitar_music_lesson_teacher_student.jpg",
+      "caption": "An attentive young boy with a classical guitar receives instruction from an older male teacher during a music lesson. Both are seated, focusing on their instruments, with sheet music visible in the foreground, indicating a structured learning environment.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Professional photo of guitar music instruction for services section",
+    "image_info": {
+      "url": "https://images.squarespace-cdn.com/content/v1/56f2c183e321400566819f9b/1519248756823-CS6A2BBW2EOOVOF4L39C/Guitar+lessons",
+      "file_path": "/workspace/imgs/guitar-music-lesson-instruction.jpg",
+      "img_format": "WEBP",
+      "mode": "RGB",
+      "file_size": 263440,
+      "width": 1500,
+      "height": 1000,
+      "total_pixels": 1500000,
+      "basic_score": 0.9012274888736699
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 95.0,
+      "explanation": "The image is highly relevant, clearly depicting a guitar music lesson with one individual demonstrating technique to another. It is a professional, high-quality photograph with excellent clarity, good composition, and no watermarks, making it very suitable for a services section.",
+      "file_name": "guitar-music-lesson-instruction.jpg",
+      "caption": "A close-up, professional shot of two individuals engaged in a guitar music lesson. One person's hands are prominently shown demonstrating a technique on the fretboard of an acoustic guitar, while another person's hand rests on their own acoustic guitar, suggesting active learning or playing. The image highlights the hands and instruments, conveying musical instruction and practice.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Professional photo of guitar music instruction for services section",
+    "image_info": {
+      "url": "https://cdn.musichouseschool.com/TeenGirlTakingGuitarLesson.jpg",
+      "file_path": "/workspace/imgs/professional_guitar_music_lesson_teaching.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 75208,
+      "width": 1000,
+      "height": 667,
+      "total_pixels": 667000,
+      "basic_score": 0.894317123295114
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 100.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 95.0,
+      "explanation": "The image perfectly matches the search query and prompt, clearly depicting a professional guitar music lesson with an instructor guiding a student's hands. It boasts excellent clarity, natural lighting, and a focused composition, with no watermarks, making it highly suitable for a services section.",
+      "file_name": "professional_guitar_music_lesson_teaching.jpg",
+      "caption": "A close-up, professional photograph of an instructor's hand guiding a student's fingers on the fretboard of an acoustic guitar during a music lesson. The image focuses on the hands and strings, emphasizing the teaching and learning interaction in a well-lit indoor setting, suitable for illustrating music instruction services.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Professional photo of guitar music instruction for services section",
+    "image_info": {
+      "url": "https://i0.wp.com/evsm.net/wp-content/uploads/2022/03/One-on-one-Guitar-lesson-for-Adult.jpg?resize=800%2C534&ssl=1",
+      "file_path": "/workspace/imgs/professional_guitar_music_instruction_lesson.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 104555,
+      "width": 800,
+      "height": 534,
+      "total_pixels": 427200,
+      "basic_score": 0.8366926630558924
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 90.0,
+      "clarity_score": 85.0,
+      "watermark_score": 80.0,
+      "overall_score": 88.0,
+      "explanation": "The image is highly relevant to the search query, depicting two individuals engaged with acoustic guitars, strongly suggesting a music lesson or collaborative teaching environment. Clarity is good with sharp focus on the subjects. There is a subtle environmental logo/text reflected in the background glass which prevents a perfect watermark score, but it is not an intrusive overlay. Overall, the photo is professional, well-composed, and suitable for a services section.",
+      "file_name": "professional_guitar_music_instruction_lesson.jpg",
+      "caption": "A candid and professional photograph of two adults, a man and a woman, smiling and seated while playing acoustic guitars. The man, in a light blue polo shirt, rests his arm on his guitar while looking at the woman. The woman, in a vibrant blue blazer, actively strums her guitar. The scene suggests a guitar music lesson, practice, or collaborative session in an indoor setting with wooden paneling.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "A professional photo of a music teacher giving piano lessons in a bright, welcoming studio for hero section",
+    "image_info": {
+      "url": "https://katepianoteacher.com/wp-content/uploads/2024/05/in-studio-lessons-1-683x1024.jpg",
+      "file_path": "/workspace/imgs/professional-piano-lesson-teacher-student-studio.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 69792,
+      "width": 683,
+      "height": 1024,
+      "total_pixels": 699392,
+      "basic_score": 0.8841651201465275
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 92.0,
+      "explanation": "The image is highly relevant to the search query, clearly depicting a professional music teacher giving a piano lesson. It's sharp, well-lit, and the composition is excellent for a hero section. There are no watermarks. The studio environment appears bright and welcoming, fitting the prompt well.",
+      "file_name": "professional-piano-lesson-teacher-student-studio.jpg",
+      "caption": "A professional female piano teacher with curly dark hair, wearing a black blazer and white shirt, leans over a digital piano, attentively guiding an adult male student with glasses and a vest as he plays the keys. The scene captures an engaging music lesson in a brightly lit, welcoming studio environment, with a focus on their hands and interaction at the instrument.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "A professional photo of a music teacher giving piano lessons in a bright, welcoming studio for hero section",
+    "image_info": {
+      "url": "https://images.squarespace-cdn.com/content/v1/5ae79fa0506fbef80001147e/1534366506919-03UFECAR60M4FP38SRYJ/Oakland%2Bpiano%2Blessons.jpg",
+      "file_path": "/workspace/imgs/professional-music-teacher-piano-lesson-studio.jpg",
+      "img_format": "WEBP",
+      "mode": "RGB",
+      "file_size": 77726,
+      "width": 1000,
+      "height": 667,
+      "total_pixels": 667000,
+      "basic_score": 0.9045903543004579
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 98.0,
+      "watermark_score": 100.0,
+      "overall_score": 92.0,
+      "explanation": "The image is highly relevant, perfectly depicting a professional music teacher giving a piano lesson in a bright, welcoming studio. Clarity is excellent with sharp details. There are no watermarks. The composition is professional and suitable for a hero section, offering an engaging view into the lesson from a hallway perspective.",
+      "file_name": "professional-music-teacher-piano-lesson-studio.jpg",
+      "caption": "A professional photograph captures a male music teacher, dressed in an orange shirt, leaning over and pointing to sheet music while instructing a young female student seated at an upright wooden piano. The lesson takes place in a bright, welcoming music studio with light beige walls and green carpet, viewed from a well-lit hallway. A framed classical music poster featuring 'HALLE SAXONY' and 'HÄNDEL' is visible on the hallway wall, along with a bulletin board and an antique-style wooden table, enhancing the professional and inviting atmosphere.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Professional photo of violin music instruction for services section",
+    "image_info": {
+      "url": "https://images.squarespace-cdn.com/content/v1/67f594e3054a9d111d3f71e9/1753731767829-68PULBRZT7LU2QALU93Z/Violin+Lessons+in+Los+Angeles+%E2%80%93+In-Home+%26+Online+Music+Instruction+for+All+Ages+.jpg",
+      "file_path": "/workspace/imgs/professional_violin_music_lessons_ad.jpg",
+      "img_format": "WEBP",
+      "mode": "RGB",
+      "file_size": 72876,
+      "width": 1080,
+      "height": 1080,
+      "total_pixels": 1166400,
+      "basic_score": 0.9276160056255495
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 85.0,
+      "watermark_score": 100.0,
+      "overall_score": 80.0,
+      "explanation": "The image is highly relevant to the search query and prompt, clearly displaying 'Violin Lessons' and a violin, implying music instruction. Clarity is good for all main elements and text. There are no watermarks. The overall quality is professional for a graphic advertisement, though it's a composite design rather than a pure photograph. The small '0% OFF' text is a minor flaw in the top right corner.",
+      "file_name": "professional_violin_music_lessons_ad.jpg",
+      "caption": "A promotional graphic for 'Los Angeles Music Teachers' offering 'Violin Lessons', featuring a clear image of a violin and bow against a warm gradient background with decorative brown swirls. The image includes call to action text: 'COME PRACTICE AND DEVELOP YOUR VIOLIN TALENT WITH US' and a phone number.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Professional photo of violin music instruction for services section",
+    "image_info": {
+      "url": "https://musiclab.co/wp-content/uploads/2025/01/Outdoors-violinist-in-a-sweate.jpg",
+      "file_path": "/workspace/imgs/professional-violin-music-lesson.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 87631,
+      "width": 1080,
+      "height": 628,
+      "total_pixels": 678240,
+      "basic_score": 0.8962615837885219
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 88.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 92.0,
+      "explanation": "The image is of high professional quality, featuring excellent clarity, focus, and natural lighting. It perfectly captures a person playing the violin, conveying artistry and professionalism, making it highly relevant to 'violin music professional'. While it doesn't explicitly show a teacher-student dynamic for 'lesson' or 'instruction', it can effectively represent the essence of music learning or the outcome of instruction for a services section.",
+      "file_name": "professional-violin-music-lesson.jpg",
+      "caption": "A warm-toned, close-up photograph of a person with long brown hair, dressed in a light beige knit cardigan, intensely playing a wooden violin outdoors. The image focuses on the hands, violin, and bow in action, with a softly blurred, natural green and brown background. It beautifully captures the concentration and artistry involved in playing music, ideal for illustrating professional music services or a music lesson environment.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Professional photo of violin music instruction for services section",
+    "image_info": {
+      "url": "https://rocksalem.com/cdn/shop/files/RCRA_liz-00382.jpg?v=1744159259&width=640",
+      "file_path": "/workspace/imgs/professional-violin-music-lesson-instruction.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 49837,
+      "width": 640,
+      "height": 800,
+      "total_pixels": 512000,
+      "basic_score": 0.8467512959670447
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 90.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 92.0,
+      "explanation": "The image is highly relevant to the search query and prompt, showcasing a professional-looking individual intently playing a violin. Its high clarity, excellent lighting, and black and white aesthetic contribute to a strong, professional overall quality suitable for a services section. It effectively conveys the essence of violin music instruction.",
+      "file_name": "professional-violin-music-lesson-instruction.jpg",
+      "caption": "A professional black and white studio portrait captures a young woman with dark, curly hair intently playing a violin. She is focused downwards on the instrument, dressed in a dark top, with her left hand positioned on the fingerboard and her right hand holding the bow across the strings. The bright, plain white background highlights her concentration and the intricate details of the violin and bow, conveying a sense of dedication, skill, and musical artistry.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Professional photo of violin music instruction for services section",
+    "image_info": {
+      "url": "https://i0.wp.com/kandmmusicschool.com/wp-content/uploads/2024/02/8001.jpg?resize=1290%2C602&ssl=1",
+      "file_path": "/workspace/imgs/professional_violin_piano_duet_music_services.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 77802,
+      "width": 1290,
+      "height": 602,
+      "total_pixels": 776580,
+      "basic_score": 0.883347923960876
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 85.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 90.0,
+      "explanation": "The image is highly relevant to 'violin music' and 'professional' context, depicting two musicians in a formal setting. While it doesn't explicitly show a teacher-student 'lesson' or 'instruction' in progress, it conveys the high standard and outcome of musical training, making it suitable for a 'services section' promoting music instruction. The clarity and overall quality are excellent, with no watermarks.",
+      "file_name": "professional_violin_piano_duet_music_services.jpg",
+      "caption": "A focused young male violinist, dressed in a dark suit, passionately plays his instrument alongside a female pianist seated at a grand piano. The scene, set against a simple, light-colored curtain background, suggests a professional performance or a dedicated practice session, embodying musical collaboration and skill. This image is suitable for showcasing musical expertise in a services section.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Elegant sheet music background for blog and content sections",
+    "image_info": {
+      "url": "https://media.istockphoto.com/id/479056111/vector/repeating-musical-notes.jpg?s=612x612&w=0&k=20&c=yUlsA9DzhFBJxEf-TZNQw9G19rJsdcJdcgGeZonscLg=",
+      "file_path": "/workspace/imgs/vintage_distressed_music_notes_sheet_background_pattern.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 95877,
+      "width": 612,
+      "height": 612,
+      "total_pixels": 374544,
+      "basic_score": 0.8199662847656203
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 93.0,
+      "clarity_score": 95.0,
+      "watermark_score": 100.0,
+      "overall_score": 90.0,
+      "explanation": "The image is highly relevant to the search query, featuring a clear and well-designed music notes sheet background. The distressed, vintage aesthetic contributes to an elegant feel, making it suitable for blog and content sections as requested in the prompt. It exhibits excellent clarity with no watermarks.",
+      "file_name": "vintage_distressed_music_notes_sheet_background_pattern.jpg",
+      "caption": "A seamless pattern featuring an array of dark brown musical notes and symbols, including quarter notes, eighth notes, and rests, arranged across multiple staffs on a light, textured, and distressed parchment-like background. The vintage and slightly worn aesthetic gives the image an elegant and artistic quality, ideal for web backgrounds, blog content sections, or decorative purposes.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Elegant sheet music background for blog and content sections",
+    "image_info": {
+      "url": "https://img.freepik.com/premium-vector/music-notes-stave-old-paper-background_88653-429.jpg",
+      "file_path": "/workspace/imgs/elegant_vintage_sheet_music_background.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 119164,
+      "width": 626,
+      "height": 444,
+      "total_pixels": 277944,
+      "basic_score": 0.7884181475335439
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 100.0,
+      "clarity_score": 90.0,
+      "watermark_score": 100.0,
+      "overall_score": 95.0,
+      "explanation": "The image is perfectly relevant to the search query 'music notes sheet background' and the prompt's request for an 'elegant sheet music background'. The clarity is excellent for the foreground elements, and the intentional faintness of background notes adds to its effectiveness as a subtle background. There are no watermarks, and the overall aesthetic is high quality, providing a sophisticated and appropriate visual for blog or content sections.",
+      "file_name": "elegant_vintage_sheet_music_background.jpg",
+      "caption": "An elegant, vintage-style background featuring black musical notes, staves, and classical musical terms such as 'largo' and 'moderato' against a textured, aged beige paper backdrop. Subtle, faded layers of additional sheet music create depth, offering a sophisticated and artistic aesthetic suitable for content sections or blog backgrounds.",
+      "recommend": true,
+      "error": ""
+    }
+  },
+  {
+    "query": "Elegant sheet music background for blog and content sections",
+    "image_info": {
+      "url": "https://media.istockphoto.com/id/165512457/vector/seamless-vector-musical-background-from-notes.jpg?s=612x612&w=0&k=20&c=OA7tMWS336kdHB2m4eKYOuJvQJyRnkxf0rs6uJmkOnY=",
+      "file_path": "/workspace/imgs/elegant_music_notes_sheet_pattern_background.jpg",
+      "img_format": "JPEG",
+      "mode": "RGB",
+      "file_size": 135553,
+      "width": 575,
+      "height": 612,
+      "total_pixels": 351900,
+      "basic_score": 0.8168165513215757
+    },
+    "llm_score": {
+      "success": true,
+      "relevance_score": 95.0,
+      "clarity_score": 100.0,
+      "watermark_score": 100.0,
+      "overall_score": 98.0,
+      "explanation": "The image is highly relevant to the search query and prompt, featuring a seamless pattern of music notes and clefs that evoke sheet music. Its clean, vector-based design ensures excellent clarity and an elegant aesthetic suitable for background use in blogs and content sections. There are no watermarks, contributing to its professional quality.",
+      "file_name": "elegant_music_notes_sheet_pattern_background.jpg",
+      "caption": "A seamless, elegant pattern of various music notes, treble clefs, bass clefs, and rests, rendered in dark grey on a light beige or off-white background. The vector-style illustration provides crisp lines and a clean, sophisticated look, ideal for use as a minimalist and professional background in digital content, blogs, or websites.",
+      "recommend": true,
+      "error": ""
+    }
+  }
+]
